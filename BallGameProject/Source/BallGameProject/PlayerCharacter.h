@@ -1,0 +1,68 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "InputMappingContext.h"
+#include "InputActionValue.h"
+#include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
+#include "CoreMinimal.h"
+#include "GameFramework/Character.h"
+#include "PlayerCharacter.generated.h"
+
+UCLASS()
+class BALLGAMEPROJECT_API APlayerCharacter : public ACharacter
+{
+	GENERATED_BODY()
+
+public:
+	// Sets default values for this character's properties
+	APlayerCharacter();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual void Input_Left(const FInputActionValue& Value);
+	virtual void Input_Right(const FInputActionValue& Value);
+	virtual void Input_Jump(const FInputActionValue& Value);
+	virtual void Input_SpeedUp(const FInputActionValue& Value);
+	virtual void Input_SlowDown(const FInputActionValue& Value);
+	virtual void Input_ShootLeft(const FInputActionValue& Value);
+	virtual void Input_ShootRight(const FInputActionValue& Value);
+	virtual void Input_ShootUp(const FInputActionValue& Value);
+	virtual void Input_ShootForward(const FInputActionValue& Value);
+
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Input_LeftAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Input_RightAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Input_JumpAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Input_SpeedUpAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Input_SlowDownAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Input_ShootLeftAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Input_ShootRightAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Input_ShootUpAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Input_ShootForwardAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputMappingContext* InputMap;
+};

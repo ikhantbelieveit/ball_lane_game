@@ -1,0 +1,9 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.BallGameProject.gen.cpp.obj": [
+			"BallGameProject.init.gen.cpp.obj",
+			"MyGameModeBase.gen.cpp.obj"
+		]
+	}
+}

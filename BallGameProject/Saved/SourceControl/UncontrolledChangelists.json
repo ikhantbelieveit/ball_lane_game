@@ -1,0 +1,21 @@
+{
+	"version": 1,
+	"changelists": [
+		{
+			"guid": "00000000000000000000000000000000",
+			"description": "Default Uncontrolled Changelist",
+			"files": [
+				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Levels/FirstTestLevel.umap",
+				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Blueprints/Modes/BP_MyGameModeBase.uasset",
+				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Blueprints/Characters/BP_PlayerCharacter.uasset",
+				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Input/IMC_Game.uasset",
+				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Input/IA_Left.uasset",
+				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Input/IA_Right.uasset",
+				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Input/IA_Jump.uasset",
+				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Input/IA_SpeedUp.uasset",
+				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Input/IA_SlowDown.uasset",
+				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Blueprints/BP_PlayerCharacter.uasset"
+			]
+		}
+	]
+}
