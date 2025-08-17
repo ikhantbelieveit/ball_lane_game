@@ -14,6 +14,9 @@
 				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Input/IA_Jump.uasset",
 				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Input/IA_SpeedUp.uasset",
 				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Input/IA_SlowDown.uasset",
+				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Sprites/Cowboy.uasset",
+				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Textures/Cowboy.uasset",
+				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Sprites/CowboySprite.uasset",
 				"C:/Users/Joseph/Documents/GitHub/ball_lane_game/BallGameProject/Content/Blueprints/BP_PlayerCharacter.uasset"
 			]
 		}

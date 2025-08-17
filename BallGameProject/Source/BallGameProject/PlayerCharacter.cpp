@@ -9,6 +9,18 @@ APlayerCharacter::APlayerCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Create a first person camera component.
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	check(CameraComponent != nullptr);
+
+	// Attach the camera component to our capsule component.
+	CameraComponent->SetupAttachment(CastChecked<USceneComponent, UCapsuleComponent>(GetCapsuleComponent()));
+
+	// Position the camera slightly above the eyes.
+	//CameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
+
+	// Enable the pawn to control camera rotation.
+	//CameraComponent->bUsePawnControlRotation = true;
 }
 
 // Called when the game starts or when spawned
@@ -28,6 +40,15 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	FVector lastPos = RootComponent->GetRelativeLocation();
+
+	FVector newPos = FVector(lastPos.X + (GetCurrentRunSpeed() * DeltaTime), lastPos.Y, lastPos.Z);
+	
+	RootComponent->SetRelativeLocation(newPos);
+
+	// Display a debug message for five seconds. 
+	// The -1 "Key" value argument prevents the message from being updated or refreshed.
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("NEW POSITION IS " + RootComponent->GetRelativeLocation().ToString()));
 }
 
 // Called to bind functionality to input
@@ -140,3 +161,7 @@ void APlayerCharacter::Input_ShootForward(const FInputActionValue& Value)
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("Shoot forward."));
 }
 
+float APlayerCharacter::GetCurrentRunSpeed()
+{
+	return DefaultRunSpeed;
+}

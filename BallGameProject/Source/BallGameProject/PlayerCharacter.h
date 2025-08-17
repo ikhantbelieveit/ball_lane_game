@@ -42,6 +42,15 @@ public:
 	virtual void Input_ShootUp(const FInputActionValue& Value);
 	virtual void Input_ShootForward(const FInputActionValue& Value);
 
+	// FPS camera.
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* CameraComponent;
+
+	UPROPERTY(EditAnywhere)
+	float DefaultRunSpeed = 500.0f;
+
+	virtual float GetCurrentRunSpeed();
+
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -65,4 +74,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputMappingContext* InputMap;
+
+	float CurrentRunSpeed;
 };
