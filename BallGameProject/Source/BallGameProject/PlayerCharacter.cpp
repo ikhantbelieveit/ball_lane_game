@@ -15,8 +15,6 @@ APlayerCharacter::APlayerCharacter()
 
 	// Attach the camera component to our capsule component.
 	CameraComponent->SetupAttachment(CastChecked<USceneComponent, UCapsuleComponent>(GetCapsuleComponent()));
-
-	SetRunSpeed(DefaultRunSpeed);
 }
 
 // Called when the game starts or when spawned
@@ -37,26 +35,48 @@ void APlayerCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	//if less than max speed
-	if (GetVelocity().X <= MaxRunSpeed)
+	//if (GetVelocity().X <= MaxRunSpeed)
+	if (true)
 	{
 		//build up speed to max
 		AddMovementInput(FVector(GetCurrentRunSpeed(), 0.0f, 0.0f));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("current speed: " + GetVelocity().ToString()));
 	}
 
-	if (JumpInput_Triggered)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Jump Active."));
-	}
-	if (JumpInput_Released)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Jump Released."));
-	}
-	if (JumpInput_Pressed)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Jump Pressed."));
-	}
+	UpdateSpeedFromInput();
+	
+	//Debug_PrintInputValues();
 
+	//clear stuff at end
 	ClearInputValues();
+}
+
+void APlayerCharacter::UpdateSpeedFromInput()
+{
+	EPlayerSpeedState newState = EPlayerSpeedState::Default;
+
+	if (SpeedInput_Active)
+	{
+		newState = EPlayerSpeedState::Fast;
+	}
+
+	SetSpeedState(newState);
+
+
+	switch (CurrentSpeedState)
+	{
+	case EPlayerSpeedState::Fast:
+		GetCharacterMovement()->MaxWalkSpeed = FastRunSpeed;
+		break;
+	case EPlayerSpeedState::Slow:
+		GetCharacterMovement()->MaxWalkSpeed = SlowRunSpeed;
+		break;
+	default:
+		GetCharacterMovement()->MaxWalkSpeed = DefaultRunSpeed;
+		break;
+	}
+
+	
 }
 
 // Called to bind functionality to input
@@ -106,6 +126,18 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	{
 		EnhancedInputComponent->BindAction(Input_SpeedUpAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_SpeedUp);
 	}
+
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(Input_SpeedUpAction, ETriggerEvent::Completed, this, &APlayerCharacter::Input_SpeedUpCancel);
+	}
+
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(Input_SpeedUpAction, ETriggerEvent::Started, this, &APlayerCharacter::Input_SpeedUpStart);
+	}
+
+
 	//slow down
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
@@ -147,35 +179,37 @@ void APlayerCharacter::Input_Right(const FInputActionValue& Value)
 
 void APlayerCharacter::Input_JumpStart(const FInputActionValue& Value)
 {
-	JumpInput_Triggered = true;
 	JumpInput_Pressed = true;
 }
 
 void APlayerCharacter::Input_Jump(const FInputActionValue& Value)
 {
-	JumpInput_Triggered = true;
+	JumpInput_Active = true;
 }
 
 void APlayerCharacter::Input_JumpCancel(const FInputActionValue& Value)
 {
-	bool lastInputTrigger = JumpInput_Triggered;
-
-	JumpInput_Triggered = false;
 	JumpInput_Released = true;
 }
 
 void APlayerCharacter::Input_SpeedUp(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("Speed up."));
+	SpeedInput_Active = true;
+}
 
-	SetRunSpeed(DefaultRunSpeed + 200);
+void APlayerCharacter::Input_SpeedUpStart(const FInputActionValue& Value)
+{
+	SpeedInput_Pressed = true;
+}
+
+void APlayerCharacter::Input_SpeedUpCancel(const FInputActionValue& Value)
+{
+	SpeedInput_Released = true;
 }
 
 void APlayerCharacter::Input_SlowDown(const FInputActionValue& Value)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("Slow down."));
-
-	SetRunSpeed(DefaultRunSpeed - 200);
 }
 
 void APlayerCharacter::Input_ShootLeft(const FInputActionValue& Value)
@@ -200,17 +234,70 @@ void APlayerCharacter::Input_ShootForward(const FInputActionValue& Value)
 
 float APlayerCharacter::GetCurrentRunSpeed()
 {
-	return CurrentRunSpeed;
+	switch (CurrentSpeedState)
+	{
+	case EPlayerSpeedState::Slow:
+		return 200;
+	case EPlayerSpeedState::Fast:
+		return 1000;
+	default:
+		return 500;
+	}
 }
 
-void APlayerCharacter::SetRunSpeed(float newSpeed)
-{
-	CurrentRunSpeed = newSpeed;
-}
+
 
 void APlayerCharacter::ClearInputValues()
 {
 	JumpInput_Pressed = false;
 	JumpInput_Released = false;
-	JumpInput_Triggered = false;
+	JumpInput_Active = false;
+
+	SpeedInput_Pressed = false;
+	SpeedInput_Released = false;
+	SpeedInput_Active = false;
+}
+
+
+
+EPlayerSpeedState APlayerCharacter::GetCurrentSpeedState()
+{
+	return EPlayerSpeedState();
+}
+
+void APlayerCharacter::SetSpeedState(EPlayerSpeedState newState)
+{
+	CurrentSpeedState = newState;
+}
+
+
+
+
+void APlayerCharacter::Debug_PrintInputValues()
+{
+	if (JumpInput_Active)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Jump Active."));
+	}
+	if (JumpInput_Released)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Jump Released."));
+	}
+	if (JumpInput_Pressed)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Jump Pressed."));
+	}
+
+	if (SpeedInput_Active)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Speed Active."));
+	}
+	if (SpeedInput_Released)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Speed Released."));
+	}
+	if (SpeedInput_Pressed)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Speed Pressed."));
+	}
 }

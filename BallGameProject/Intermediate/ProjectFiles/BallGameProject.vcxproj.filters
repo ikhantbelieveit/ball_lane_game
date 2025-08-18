@@ -39,6 +39,9 @@
     <ClInclude Include="..\..\Source\BallGameProject\BallGameProject.h">
       <Filter>Source\BallGameProject</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\BallGameProject\EPlayerSpeedState.h">
+      <Filter>Source\BallGameProject</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\BallGameProject\MyGameModeBase.cpp">
       <Filter>Source\BallGameProject</Filter>
     </ClCompile>

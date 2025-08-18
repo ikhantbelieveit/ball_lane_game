@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "EPlayerSpeedState.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "InputMappingContext.h"
@@ -10,6 +11,7 @@
 #include "EnhancedInputComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -29,15 +31,22 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void UpdateSpeedFromInput();
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void Input_Left(const FInputActionValue& Value);
 	virtual void Input_Right(const FInputActionValue& Value);
+
 	virtual void Input_JumpStart(const FInputActionValue& Value);
 	virtual void Input_Jump(const FInputActionValue& Value);
 	virtual void Input_JumpCancel(const FInputActionValue& Value);
+
+	virtual void Input_SpeedUpStart(const FInputActionValue& Value);
 	virtual void Input_SpeedUp(const FInputActionValue& Value);
+	virtual void Input_SpeedUpCancel(const FInputActionValue& Value);
+
 	virtual void Input_SlowDown(const FInputActionValue& Value);
 	virtual void Input_ShootLeft(const FInputActionValue& Value);
 	virtual void Input_ShootRight(const FInputActionValue& Value);
@@ -49,12 +58,20 @@ public:
 	UCameraComponent* CameraComponent;
 
 	UPROPERTY(EditAnywhere)
-	float DefaultRunSpeed = 500.0f;
+	float DefaultRunSpeed = 600.0f;
 
 	UPROPERTY(EditAnywhere)
-	float MaxRunSpeed = 2500.0f;
+	float FastRunSpeed = 1200.0f;
+
+	UPROPERTY(EditAnywhere)
+	float SlowRunSpeed = 200.0f;
 
 	virtual float GetCurrentRunSpeed();
+
+	EPlayerSpeedState GetCurrentSpeedState();
+
+	void SetSpeedState(EPlayerSpeedState newState);
+
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -83,11 +100,17 @@ protected:
 
 	float CurrentRunSpeed;
 
-	void SetRunSpeed(float newSpeed);
-
 	void ClearInputValues();
 
-	bool JumpInput_Triggered;
+	bool JumpInput_Active;
 	bool JumpInput_Pressed;
 	bool JumpInput_Released;
+
+	bool SpeedInput_Active;
+	bool SpeedInput_Pressed;
+	bool SpeedInput_Released;
+
+	void Debug_PrintInputValues();
+
+	EPlayerSpeedState CurrentSpeedState;
 };
