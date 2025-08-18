@@ -60,6 +60,16 @@ void APlayerCharacter::UpdateSpeedFromInput()
 		newState = EPlayerSpeedState::Fast;
 	}
 
+	if (SlowInput_Active)
+	{
+		newState = EPlayerSpeedState::Slow;
+	}
+
+	if (SpeedInput_Active && SlowInput_Active)
+	{
+		newState = EPlayerSpeedState::Default;
+	}
+
 	SetSpeedState(newState);
 
 
@@ -143,6 +153,17 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	{
 		EnhancedInputComponent->BindAction(Input_SlowDownAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_SlowDown);
 	}
+
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(Input_SlowDownAction, ETriggerEvent::Completed, this, &APlayerCharacter::Input_SlowDownCancel);
+	}
+
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(Input_SlowDownAction, ETriggerEvent::Started, this, &APlayerCharacter::Input_SlowDownStart);
+	}
+
 	//shoot left
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
@@ -207,9 +228,19 @@ void APlayerCharacter::Input_SpeedUpCancel(const FInputActionValue& Value)
 	SpeedInput_Released = true;
 }
 
+void APlayerCharacter::Input_SlowDownStart(const FInputActionValue& Value)
+{
+	SlowInput_Pressed = true;
+}
+
 void APlayerCharacter::Input_SlowDown(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("Slow down."));
+	SlowInput_Active = true;
+}
+
+void APlayerCharacter::Input_SlowDownCancel(const FInputActionValue& Value)
+{
+	SlowInput_Released = true;
 }
 
 void APlayerCharacter::Input_ShootLeft(const FInputActionValue& Value)
@@ -256,6 +287,10 @@ void APlayerCharacter::ClearInputValues()
 	SpeedInput_Pressed = false;
 	SpeedInput_Released = false;
 	SpeedInput_Active = false;
+
+	SlowInput_Pressed = false;
+	SlowInput_Released = false;
+	SlowInput_Active = false;
 }
 
 
@@ -299,5 +334,18 @@ void APlayerCharacter::Debug_PrintInputValues()
 	if (SpeedInput_Pressed)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Speed Pressed."));
+	}
+
+	if (SlowInput_Active)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Slow Active."));
+	}
+	if (SlowInput_Released)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Slow Released."));
+	}
+	if (SlowInput_Pressed)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Slow Pressed."));
 	}
 }

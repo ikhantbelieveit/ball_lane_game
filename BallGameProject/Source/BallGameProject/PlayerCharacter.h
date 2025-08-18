@@ -47,7 +47,10 @@ public:
 	virtual void Input_SpeedUp(const FInputActionValue& Value);
 	virtual void Input_SpeedUpCancel(const FInputActionValue& Value);
 
+	virtual void Input_SlowDownStart(const FInputActionValue& Value);
 	virtual void Input_SlowDown(const FInputActionValue& Value);
+	virtual void Input_SlowDownCancel(const FInputActionValue& Value);
+
 	virtual void Input_ShootLeft(const FInputActionValue& Value);
 	virtual void Input_ShootRight(const FInputActionValue& Value);
 	virtual void Input_ShootUp(const FInputActionValue& Value);
@@ -109,6 +112,10 @@ protected:
 	bool SpeedInput_Active;
 	bool SpeedInput_Pressed;
 	bool SpeedInput_Released;
+
+	bool SlowInput_Active;
+	bool SlowInput_Pressed;
+	bool SlowInput_Released;
 
 	void Debug_PrintInputValues();
 
