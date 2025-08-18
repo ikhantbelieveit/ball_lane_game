@@ -40,15 +40,35 @@ void APlayerCharacter::Tick(float DeltaTime)
 	{
 		//build up speed to max
 		AddMovementInput(FVector(GetCurrentRunSpeed(), 0.0f, 0.0f));
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("current speed: " + GetVelocity().ToString()));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("current speed: " + GetVelocity().ToString()));
 	}
 
 	UpdateSpeedFromInput();
+	UpdateLaneFromInput();
 	
 	//Debug_PrintInputValues();
 
 	//clear stuff at end
 	ClearInputValues();
+}
+
+void APlayerCharacter::UpdateLaneFromInput()
+{
+	if (LeftInput_Pressed)
+	{
+		FVector prevLoc = RootComponent->GetComponentLocation();
+		FVector newLoc = FVector(prevLoc.X, prevLoc.Y - LaneDistance, prevLoc.Z);
+
+		RootComponent->SetWorldLocation(newLoc);
+	}
+
+	if (RightInput_Pressed)
+	{
+		FVector prevLoc = RootComponent->GetComponentLocation();
+		FVector newLoc = FVector(prevLoc.X, prevLoc.Y + LaneDistance, prevLoc.Z);
+
+		RootComponent->SetWorldLocation(newLoc);
+	}
 }
 
 void APlayerCharacter::UpdateSpeedFromInput()
@@ -108,12 +128,12 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	//left
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		EnhancedInputComponent->BindAction(Input_LeftAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_Left);
+		EnhancedInputComponent->BindAction(Input_LeftAction, ETriggerEvent::Started, this, &APlayerCharacter::Input_LeftStart);
 	}
 	//right
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		EnhancedInputComponent->BindAction(Input_RightAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_Right);
+		EnhancedInputComponent->BindAction(Input_RightAction, ETriggerEvent::Started, this, &APlayerCharacter::Input_RightStart);
 	}
 	//jump
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
@@ -188,14 +208,14 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 }
 
-void APlayerCharacter::Input_Left(const FInputActionValue& Value)
+void APlayerCharacter::Input_LeftStart(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("Left."));
+	LeftInput_Pressed = true;
 }
 
-void APlayerCharacter::Input_Right(const FInputActionValue& Value)
+void APlayerCharacter::Input_RightStart(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("Right."));
+	RightInput_Pressed = true;
 }
 
 void APlayerCharacter::Input_JumpStart(const FInputActionValue& Value)
@@ -268,11 +288,11 @@ float APlayerCharacter::GetCurrentRunSpeed()
 	switch (CurrentSpeedState)
 	{
 	case EPlayerSpeedState::Slow:
-		return 200;
+		return SlowRunSpeed;
 	case EPlayerSpeedState::Fast:
-		return 1000;
+		return FastRunSpeed;
 	default:
-		return 500;
+		return DefaultRunSpeed;
 	}
 }
 
@@ -291,6 +311,10 @@ void APlayerCharacter::ClearInputValues()
 	SlowInput_Pressed = false;
 	SlowInput_Released = false;
 	SlowInput_Active = false;
+
+	LeftInput_Pressed = false;
+	
+	RightInput_Pressed = false;
 }
 
 
@@ -347,5 +371,15 @@ void APlayerCharacter::Debug_PrintInputValues()
 	if (SlowInput_Pressed)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Slow Pressed."));
+	}
+
+	if (LeftInput_Pressed)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Left Pressed."));
+	}
+
+	if (RightInput_Pressed)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Right Pressed."));
 	}
 }

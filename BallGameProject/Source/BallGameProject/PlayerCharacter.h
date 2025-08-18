@@ -33,11 +33,13 @@ public:
 
 	void UpdateSpeedFromInput();
 
+	void UpdateLaneFromInput();
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	virtual void Input_Left(const FInputActionValue& Value);
-	virtual void Input_Right(const FInputActionValue& Value);
+	virtual void Input_LeftStart(const FInputActionValue& Value);
+	virtual void Input_RightStart(const FInputActionValue& Value);
 
 	virtual void Input_JumpStart(const FInputActionValue& Value);
 	virtual void Input_Jump(const FInputActionValue& Value);
@@ -75,6 +77,9 @@ public:
 
 	void SetSpeedState(EPlayerSpeedState newState);
 
+	UPROPERTY(EditAnywhere)
+	float LaneDistance = 500.0f;
+
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -86,10 +91,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* Input_SpeedUpAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-
 	class UInputAction* Input_SlowDownAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-
 	class UInputAction* Input_ShootLeftAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* Input_ShootRightAction;
@@ -116,6 +119,10 @@ protected:
 	bool SlowInput_Active;
 	bool SlowInput_Pressed;
 	bool SlowInput_Released;
+
+	bool LeftInput_Pressed;
+
+	bool RightInput_Pressed;
 
 	void Debug_PrintInputValues();
 
