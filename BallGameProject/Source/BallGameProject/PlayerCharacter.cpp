@@ -16,11 +16,7 @@ APlayerCharacter::APlayerCharacter()
 	// Attach the camera component to our capsule component.
 	CameraComponent->SetupAttachment(CastChecked<USceneComponent, UCapsuleComponent>(GetCapsuleComponent()));
 
-	// Position the camera slightly above the eyes.
-	//CameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
-
-	// Enable the pawn to control camera rotation.
-	//CameraComponent->bUsePawnControlRotation = true;
+	SetRunSpeed(DefaultRunSpeed);
 }
 
 // Called when the game starts or when spawned
@@ -40,15 +36,27 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FVector lastPos = RootComponent->GetRelativeLocation();
+	//if less than max speed
+	if (GetVelocity().X <= MaxRunSpeed)
+	{
+		//build up speed to max
+		AddMovementInput(FVector(GetCurrentRunSpeed(), 0.0f, 0.0f));
+	}
 
-	FVector newPos = FVector(lastPos.X + (GetCurrentRunSpeed() * DeltaTime), lastPos.Y, lastPos.Z);
-	
-	RootComponent->SetRelativeLocation(newPos);
+	if (JumpInput_Triggered)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Jump Active."));
+	}
+	if (JumpInput_Released)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Jump Released."));
+	}
+	if (JumpInput_Pressed)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Jump Pressed."));
+	}
 
-	// Display a debug message for five seconds. 
-	// The -1 "Key" value argument prevents the message from being updated or refreshed.
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("NEW POSITION IS " + RootComponent->GetRelativeLocation().ToString()));
+	ClearInputValues();
 }
 
 // Called to bind functionality to input
@@ -82,6 +90,17 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	{
 		EnhancedInputComponent->BindAction(Input_JumpAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_Jump);
 	}
+
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(Input_JumpAction, ETriggerEvent::Completed, this, &APlayerCharacter::Input_JumpCancel);
+	}
+
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(Input_JumpAction, ETriggerEvent::Started, this, &APlayerCharacter::Input_JumpStart);
+	}
+
 	//speed up
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
@@ -126,19 +145,37 @@ void APlayerCharacter::Input_Right(const FInputActionValue& Value)
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("Right."));
 }
 
+void APlayerCharacter::Input_JumpStart(const FInputActionValue& Value)
+{
+	JumpInput_Triggered = true;
+	JumpInput_Pressed = true;
+}
+
 void APlayerCharacter::Input_Jump(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("Jump."));
+	JumpInput_Triggered = true;
+}
+
+void APlayerCharacter::Input_JumpCancel(const FInputActionValue& Value)
+{
+	bool lastInputTrigger = JumpInput_Triggered;
+
+	JumpInput_Triggered = false;
+	JumpInput_Released = true;
 }
 
 void APlayerCharacter::Input_SpeedUp(const FInputActionValue& Value)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("Speed up."));
+
+	SetRunSpeed(DefaultRunSpeed + 200);
 }
 
 void APlayerCharacter::Input_SlowDown(const FInputActionValue& Value)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("Slow down."));
+
+	SetRunSpeed(DefaultRunSpeed - 200);
 }
 
 void APlayerCharacter::Input_ShootLeft(const FInputActionValue& Value)
@@ -163,5 +200,17 @@ void APlayerCharacter::Input_ShootForward(const FInputActionValue& Value)
 
 float APlayerCharacter::GetCurrentRunSpeed()
 {
-	return DefaultRunSpeed;
+	return CurrentRunSpeed;
+}
+
+void APlayerCharacter::SetRunSpeed(float newSpeed)
+{
+	CurrentRunSpeed = newSpeed;
+}
+
+void APlayerCharacter::ClearInputValues()
+{
+	JumpInput_Pressed = false;
+	JumpInput_Released = false;
+	JumpInput_Triggered = false;
 }

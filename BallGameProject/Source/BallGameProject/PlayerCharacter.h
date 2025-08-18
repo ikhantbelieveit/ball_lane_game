@@ -34,7 +34,9 @@ public:
 
 	virtual void Input_Left(const FInputActionValue& Value);
 	virtual void Input_Right(const FInputActionValue& Value);
+	virtual void Input_JumpStart(const FInputActionValue& Value);
 	virtual void Input_Jump(const FInputActionValue& Value);
+	virtual void Input_JumpCancel(const FInputActionValue& Value);
 	virtual void Input_SpeedUp(const FInputActionValue& Value);
 	virtual void Input_SlowDown(const FInputActionValue& Value);
 	virtual void Input_ShootLeft(const FInputActionValue& Value);
@@ -49,8 +51,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	float DefaultRunSpeed = 500.0f;
 
-	virtual float GetCurrentRunSpeed();
+	UPROPERTY(EditAnywhere)
+	float MaxRunSpeed = 2500.0f;
 
+	virtual float GetCurrentRunSpeed();
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -62,8 +66,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* Input_SpeedUpAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+
 	class UInputAction* Input_SlowDownAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+
 	class UInputAction* Input_ShootLeftAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* Input_ShootRightAction;
@@ -76,4 +82,12 @@ protected:
 	class UInputMappingContext* InputMap;
 
 	float CurrentRunSpeed;
+
+	void SetRunSpeed(float newSpeed);
+
+	void ClearInputValues();
+
+	bool JumpInput_Triggered;
+	bool JumpInput_Pressed;
+	bool JumpInput_Released;
 };
