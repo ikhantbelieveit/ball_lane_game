@@ -46,12 +46,30 @@
 SourceArt/**/*.png
 SourceArt/**/*.tga
 
-# Binary Files
-Binaries/*
-Plugins/**/Binaries/*
+# Unreal Engine intermediate + generated files
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vscode/
+.idea/
+*.VC.db
+*.opensdf
+*.sdf
+*.suo
+*.user
+*.userprefs
+*.db
+*.opendb
 
-# Builds
-Build/*
+# Build results
+*.xcodeproj
+*.xcworkspace
+*.sln
+*.suo
+
+# Ignore local config
+Config/DefaultEditor.ini
 
 # Whitelist PakBlacklist-<BuildConfiguration>.txt files
 !Build/*/
