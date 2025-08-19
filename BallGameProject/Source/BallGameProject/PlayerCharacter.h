@@ -2,6 +2,7 @@
 
 #pragma once
 
+
 #include "EPlayerSpeedState.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -13,6 +14,9 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "PlayerCharacter.generated.h"
+
+// Forward declaration of Paper2D component
+class UPaperSpriteComponent;
 
 UCLASS()
 class BALLGAMEPROJECT_API APlayerCharacter : public ACharacter
@@ -61,7 +65,6 @@ public:
 	// FPS camera.
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComponent;
-
 	UPROPERTY(EditAnywhere)
 	float DefaultRunSpeed = 600.0f;
 

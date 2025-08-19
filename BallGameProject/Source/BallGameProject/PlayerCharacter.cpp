@@ -9,6 +9,8 @@ APlayerCharacter::APlayerCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	PrimaryActorTick.TickGroup = TG_PostUpdateWork;
+
 	// Create a first person camera component.
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	check(CameraComponent != nullptr);
@@ -34,14 +36,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//if less than max speed
-	//if (GetVelocity().X <= MaxRunSpeed)
-	if (true)
-	{
-		//build up speed to max
-		AddMovementInput(FVector(GetCurrentRunSpeed(), 0.0f, 0.0f));
-		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("current speed: " + GetVelocity().ToString()));
-	}
+	//scroll behaviour
+	AddMovementInput(FVector(GetCurrentRunSpeed(), 0.0f, 0.0f));
 
 	UpdateSpeedFromInput();
 	UpdateLaneFromInput();
@@ -56,18 +52,24 @@ void APlayerCharacter::UpdateLaneFromInput()
 {
 	if (LeftInput_Pressed)
 	{
-		FVector prevLoc = RootComponent->GetComponentLocation();
-		FVector newLoc = FVector(prevLoc.X, prevLoc.Y - LaneDistance, prevLoc.Z);
+		FVector offset = FVector(0, -LaneDistance, 0);
+		AddActorWorldOffset(offset);
 
-		RootComponent->SetWorldLocation(newLoc);
+		CameraComponent->SetWorldLocation(FVector(
+			CameraComponent->GetComponentLocation().X,
+			0,
+			CameraComponent->GetComponentLocation().Z));
 	}
 
 	if (RightInput_Pressed)
 	{
-		FVector prevLoc = RootComponent->GetComponentLocation();
-		FVector newLoc = FVector(prevLoc.X, prevLoc.Y + LaneDistance, prevLoc.Z);
+		FVector offset = FVector(0, LaneDistance, 0);
+		AddActorWorldOffset(offset);
 
-		RootComponent->SetWorldLocation(newLoc);
+		CameraComponent->SetWorldLocation(FVector(
+			CameraComponent->GetComponentLocation().X,
+			0,
+			CameraComponent->GetComponentLocation().Z));
 	}
 }
 
