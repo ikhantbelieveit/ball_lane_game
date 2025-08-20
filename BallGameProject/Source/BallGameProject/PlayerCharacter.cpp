@@ -41,11 +41,18 @@ void APlayerCharacter::Tick(float DeltaTime)
 	UpdateSpeedFromInput();
 	UpdateLaneFromInput();
 	UpdateJumpFromInput();
+
+
+	//clamp camera Z pos
+	FVector CameraClampZPos = FVector(CameraComponent->GetComponentLocation().X, CameraComponent->GetComponentLocation().Y, CameraHeight);
+	CameraComponent->SetWorldLocation(CameraClampZPos);
 	
 	//Debug_PrintInputValues();
 
 	//clear stuff at end
 	ClearInputValues();
+
+	
 }
 
 void APlayerCharacter::UpdateLaneFromInput()

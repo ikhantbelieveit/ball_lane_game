@@ -87,6 +87,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	float LaneDistance = 500.0f;
 
+	UPROPERTY(EditAnywhere)
+	float CameraHeight = 175.0f;
+
 
 
 protected:
