@@ -36,11 +36,11 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//scroll behaviour
-	AddMovementInput(FVector(GetCurrentRunSpeed(), 0.0f, 0.0f));
+	UpdateLaneScroll();
 
 	UpdateSpeedFromInput();
 	UpdateLaneFromInput();
+	UpdateJumpFromInput();
 	
 	//Debug_PrintInputValues();
 
@@ -107,8 +107,25 @@ void APlayerCharacter::UpdateSpeedFromInput()
 		GetCharacterMovement()->MaxWalkSpeed = DefaultRunSpeed;
 		break;
 	}
+}
 
-	
+void APlayerCharacter::UpdateJumpFromInput()
+{
+	if (JumpInput_Active)
+	{
+		bPressedJump = true;
+	}
+
+	if (JumpInput_Released)
+	{
+		bPressedJump = false;
+	}
+}
+
+void APlayerCharacter::UpdateLaneScroll()
+{
+	//scroll behaviour
+	AddMovementInput(FVector(GetCurrentRunSpeed(), 0.0f, 0.0f));
 }
 
 // Called to bind functionality to input

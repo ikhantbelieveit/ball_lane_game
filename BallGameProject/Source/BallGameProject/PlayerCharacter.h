@@ -39,6 +39,10 @@ public:
 
 	void UpdateLaneFromInput();
 
+	void UpdateJumpFromInput();
+
+	void UpdateLaneScroll();
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -82,6 +86,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float LaneDistance = 500.0f;
+
 
 
 protected:
