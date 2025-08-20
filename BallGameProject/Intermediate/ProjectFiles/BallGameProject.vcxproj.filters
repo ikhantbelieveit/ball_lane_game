@@ -39,6 +39,12 @@
     <ClInclude Include="..\..\Source\BallGameProject\BallGameProject.h">
       <Filter>Source\BallGameProject</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\BallGameProject\EPlayerProjectileDirection.cpp">
+      <Filter>Source\BallGameProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BallGameProject\EPlayerProjectileDirection.h">
+      <Filter>Source\BallGameProject</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\BallGameProject\EPlayerSpeedState.cpp">
       <Filter>Source\BallGameProject</Filter>
     </ClCompile>
@@ -55,6 +61,12 @@
       <Filter>Source\BallGameProject</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\BallGameProject\PlayerCharacter.h">
+      <Filter>Source\BallGameProject</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\BallGameProject\PlayerProjectile.cpp">
+      <Filter>Source\BallGameProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BallGameProject\PlayerProjectile.h">
       <Filter>Source\BallGameProject</Filter>
     </ClInclude>
   </ItemGroup>

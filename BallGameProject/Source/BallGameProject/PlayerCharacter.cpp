@@ -41,6 +41,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 	UpdateSpeedFromInput();
 	UpdateLaneFromInput();
 	UpdateJumpFromInput();
+	UpdateShootFromInput();
 
 
 	//clamp camera Z pos
@@ -53,6 +54,26 @@ void APlayerCharacter::Tick(float DeltaTime)
 	ClearInputValues();
 
 	
+}
+
+void APlayerCharacter::UpdateShootFromInput()
+{
+	if (ShootLeftInput_Pressed)
+	{
+		Shoot(EPlayerProjectileDirection::Left);
+	}
+	if (ShootRightInput_Pressed)
+	{
+		Shoot(EPlayerProjectileDirection::Right);
+	}
+	if (ShootUpInput_Pressed)
+	{
+		Shoot(EPlayerProjectileDirection::Up);
+	}
+	if (ShootForwardInput_Pressed)
+	{
+		Shoot(EPlayerProjectileDirection::Forward);
+	}
 }
 
 void APlayerCharacter::UpdateLaneFromInput()
@@ -215,23 +236,40 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	{
 		EnhancedInputComponent->BindAction(Input_ShootLeftAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_ShootLeft);
 	}
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(Input_ShootLeftAction, ETriggerEvent::Started, this, &APlayerCharacter::Input_ShootLeftStart);
+	}
+
 	//shoot right
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(Input_ShootRightAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_ShootRight);
 	}
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(Input_ShootRightAction, ETriggerEvent::Started, this, &APlayerCharacter::Input_ShootRightStart);
+	}
+
 	//shoot up
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(Input_ShootUpAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_ShootUp);
 	}
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(Input_ShootUpAction, ETriggerEvent::Started, this, &APlayerCharacter::Input_ShootUpStart);
+	}
+
 	//shoot forward
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(Input_ShootForwardAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_ShootForward);
 	}
-
-
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(Input_ShootForwardAction, ETriggerEvent::Started, this, &APlayerCharacter::Input_ShootForwardStart);
+	}
 }
 
 void APlayerCharacter::Input_LeftStart(const FInputActionValue& Value)
@@ -291,22 +329,95 @@ void APlayerCharacter::Input_SlowDownCancel(const FInputActionValue& Value)
 
 void APlayerCharacter::Input_ShootLeft(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("Shoot left."));
+	ShootLeftInput_Active = true;
 }
 
 void APlayerCharacter::Input_ShootRight(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("Shoot right."));
+	ShootRightInput_Active = true;
 }
 
 void APlayerCharacter::Input_ShootUp(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("Shoot up."));
+	ShootUpInput_Active = true;
 }
 
 void APlayerCharacter::Input_ShootForward(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("Shoot forward."));
+	ShootForwardInput_Active = true;
+}
+
+void APlayerCharacter::Input_ShootLeftStart(const FInputActionValue& Value)
+{
+	ShootLeftInput_Pressed = true;
+}
+
+void APlayerCharacter::Input_ShootRightStart(const FInputActionValue& Value)
+{
+	ShootRightInput_Pressed = true;
+}
+
+void APlayerCharacter::Input_ShootUpStart(const FInputActionValue& Value)
+{
+	ShootUpInput_Pressed = true;
+}
+
+void APlayerCharacter::Input_ShootForwardStart(const FInputActionValue& Value)
+{
+	ShootForwardInput_Pressed = true;
+}
+
+void APlayerCharacter::Shoot(EPlayerProjectileDirection direction)
+{
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.Instigator = GetInstigator();
+
+		FVector shootPos = GetActorLocation();
+		FRotator defaultRotation = FRotator();
+
+
+		switch (direction)
+		{
+		case EPlayerProjectileDirection::Left:
+			break;
+		case EPlayerProjectileDirection::Right:
+			break;
+		case EPlayerProjectileDirection::Up:
+			break;
+		case EPlayerProjectileDirection::Forward:
+			break;
+		}
+
+		// Spawn the projectile at the muzzle.
+		APlayerProjectile* Projectile = World->SpawnActor<APlayerProjectile>(ProjectileClass, shootPos, defaultRotation, SpawnParams);
+		if (Projectile)
+		{
+			// Set the projectile's initial trajectory.
+			FVector LaunchDirection = FVector();
+			
+			switch (direction)
+			{
+			case EPlayerProjectileDirection::Left:
+				LaunchDirection = FVector(0, -1, 0);
+				break;
+			case EPlayerProjectileDirection::Right:
+				LaunchDirection = FVector(0, 1, 0);
+				break;
+			case EPlayerProjectileDirection::Up:
+				LaunchDirection = FVector(0, 0, 1);
+				break;
+			case EPlayerProjectileDirection::Forward:
+				LaunchDirection = FVector(1, 0, 0);
+				break;
+			}
+
+			Projectile->FireInDirection(LaunchDirection);
+		}
+	}
 }
 
 float APlayerCharacter::GetCurrentRunSpeed()
@@ -339,8 +450,17 @@ void APlayerCharacter::ClearInputValues()
 	SlowInput_Active = false;
 
 	LeftInput_Pressed = false;
-	
 	RightInput_Pressed = false;
+
+	ShootLeftInput_Active = false;
+	ShootRightInput_Active = false;
+	ShootUpInput_Active = false;
+	ShootForwardInput_Active = false;
+
+	ShootLeftInput_Pressed = false;
+	ShootRightInput_Pressed = false;
+	ShootUpInput_Pressed = false;
+	ShootForwardInput_Pressed = false;
 }
 
 

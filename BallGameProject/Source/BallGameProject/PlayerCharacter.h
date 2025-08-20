@@ -2,7 +2,8 @@
 
 #pragma once
 
-
+#include "EPlayerProjectileDirection.h"
+#include "PlayerProjectile.h"
 #include "EPlayerSpeedState.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -41,6 +42,8 @@ public:
 
 	void UpdateJumpFromInput();
 
+	void UpdateShootFromInput();
+
 	void UpdateLaneScroll();
 
 	// Called to bind functionality to input
@@ -65,6 +68,13 @@ public:
 	virtual void Input_ShootRight(const FInputActionValue& Value);
 	virtual void Input_ShootUp(const FInputActionValue& Value);
 	virtual void Input_ShootForward(const FInputActionValue& Value);
+
+	virtual void Input_ShootLeftStart(const FInputActionValue& Value);
+	virtual void Input_ShootRightStart(const FInputActionValue& Value);
+	virtual void Input_ShootUpStart(const FInputActionValue& Value);
+	virtual void Input_ShootForwardStart(const FInputActionValue& Value);
+
+	void Shoot(EPlayerProjectileDirection direction);
 
 	// FPS camera.
 	UPROPERTY(VisibleAnywhere)
@@ -115,6 +125,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputMappingContext* InputMap;
 
+	UPROPERTY(EditDefaultsOnly, Category=Projectile)
+	TSubclassOf<class APlayerProjectile> ProjectileClass;
+
 	float CurrentRunSpeed;
 
 	void ClearInputValues();
@@ -134,6 +147,16 @@ protected:
 	bool LeftInput_Pressed;
 
 	bool RightInput_Pressed;
+
+	bool ShootLeftInput_Active;
+	bool ShootRightInput_Active;
+	bool ShootUpInput_Active;
+	bool ShootForwardInput_Active;
+
+	bool ShootLeftInput_Pressed;
+	bool ShootRightInput_Pressed;
+	bool ShootUpInput_Pressed;
+	bool ShootForwardInput_Pressed;
 
 	void Debug_PrintInputValues();
 
