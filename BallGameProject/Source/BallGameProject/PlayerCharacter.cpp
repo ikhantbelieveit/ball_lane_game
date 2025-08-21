@@ -43,6 +43,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 	UpdateJumpFromInput();
 	UpdateShootFromInput();
 
+	UpdateJumpState(DeltaTime);
+
 
 	//clamp camera Z pos
 	FVector CameraClampZPos = FVector(CameraComponent->GetComponentLocation().X, CameraComponent->GetComponentLocation().Y, CameraHeight);
@@ -139,9 +141,10 @@ void APlayerCharacter::UpdateSpeedFromInput()
 
 void APlayerCharacter::UpdateJumpFromInput()
 {
-	if (JumpInput_Active)
+	if (JumpInput_Pressed)
 	{
 		bPressedJump = true;
+		SetJumpState(EPlayerJumpState::Rise);
 	}
 
 	if (JumpInput_Released)
@@ -154,6 +157,30 @@ void APlayerCharacter::UpdateLaneScroll()
 {
 	//scroll behaviour
 	AddMovementInput(FVector(GetCurrentRunSpeed(), 0.0f, 0.0f));
+}
+
+void APlayerCharacter::UpdateJumpState(float DeltaTime)
+{
+	TimeSinceJumpStateChange += DeltaTime;
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Time since jump state change: " + FString::SanitizeFloat(TimeSinceJumpStateChange)));
+
+	switch (CurrentJumpState)
+	{
+	case EPlayerJumpState::Rise:
+		if (GetVelocity().Z <= 0.01f)
+		{
+			SetJumpState(EPlayerJumpState::Apex);
+		}
+		break;
+	case EPlayerJumpState::Fall:
+		break;
+	case EPlayerJumpState::Apex:
+		if (TimeSinceJumpStateChange >= JumpApexHangTime)
+		{
+			SetJumpState(EPlayerJumpState::Fall);
+		}
+		break;
+	}
 }
 
 // Called to bind functionality to input
@@ -411,7 +438,7 @@ void APlayerCharacter::Shoot(EPlayerProjectileDirection direction)
 				LaunchDirection = FVector(0, 0, 1);
 				break;
 			case EPlayerProjectileDirection::Forward:
-				LaunchDirection = FVector(5, 0, 0);
+				LaunchDirection = FVector(1, 0, 0);
 				UScrollWithPlayerComponent* scrollComp = (UScrollWithPlayerComponent*)Projectile->GetComponentByClass(UScrollWithPlayerComponent::StaticClass());
 				scrollComp->Enabled = false;
 				UProjectileMovementComponent* projMoveComp = (UProjectileMovementComponent*)Projectile->GetComponentByClass(UProjectileMovementComponent::StaticClass());
@@ -470,15 +497,33 @@ void APlayerCharacter::ClearInputValues()
 }
 
 
-
-EPlayerSpeedState APlayerCharacter::GetCurrentSpeedState()
-{
-	return EPlayerSpeedState();
-}
-
 void APlayerCharacter::SetSpeedState(EPlayerSpeedState newState)
 {
 	CurrentSpeedState = newState;
+}
+
+void APlayerCharacter::SetJumpState(EPlayerJumpState newState)
+{
+	CurrentJumpState = newState;
+	TimeSinceJumpStateChange = 0.0f;
+
+	UCharacterMovementComponent* characterMovement = (UCharacterMovementComponent*)GetComponentByClass(UCharacterMovementComponent::StaticClass());
+
+	switch (CurrentJumpState)
+	{
+	case EPlayerJumpState::Rise:
+		characterMovement->GravityScale = JumpRiseGravity;
+		break;
+	case EPlayerJumpState::Apex:
+		characterMovement->GravityScale = 0;
+		break;
+	case EPlayerJumpState::Fall:
+		characterMovement->GravityScale = JumpFallGravity;
+		break;
+	case EPlayerJumpState::Grounded:
+		characterMovement->GravityScale = JumpRiseGravity;	//might need changing
+		break;
+	}
 }
 
 

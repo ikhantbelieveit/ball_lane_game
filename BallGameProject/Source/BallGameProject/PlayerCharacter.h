@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "EPlayerJumpState.h"
 #include "EPlayerProjectileDirection.h"
 #include "PlayerProjectile.h"
 #include "EPlayerSpeedState.h"
@@ -47,6 +48,8 @@ public:
 
 	void UpdateLaneScroll();
 
+	void UpdateJumpState(float DeltaTime);
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -89,11 +92,20 @@ public:
 	UPROPERTY(EditAnywhere)
 	float SlowRunSpeed = 200.0f;
 
+	UPROPERTY(EditAnywhere)
+	float JumpRiseGravity = 0.7f;
+
+	UPROPERTY(EditAnywhere)
+	float JumpFallGravity = 0.2f;
+
+	UPROPERTY(EditAnywhere)
+	float JumpApexHangTime = 0.1f;
+
 	virtual float GetCurrentRunSpeed();
 
-	EPlayerSpeedState GetCurrentSpeedState();
-
 	void SetSpeedState(EPlayerSpeedState newState);
+	void SetJumpState(EPlayerJumpState newState);
+	float TimeSinceJumpStateChange;
 
 	UPROPERTY(EditAnywhere)
 	float LaneDistance = 500.0f;
@@ -162,4 +174,6 @@ protected:
 	void Debug_PrintInputValues();
 
 	EPlayerSpeedState CurrentSpeedState;
+
+	EPlayerJumpState CurrentJumpState;
 };
