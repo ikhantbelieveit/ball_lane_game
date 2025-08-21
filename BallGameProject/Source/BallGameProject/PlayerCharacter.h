@@ -18,6 +18,7 @@
 
 // Forward declaration of Paper2D component
 class UPaperSpriteComponent;
+class UScrollWithPlayerComponent;
 
 UCLASS()
 class BALLGAMEPROJECT_API APlayerCharacter : public ACharacter

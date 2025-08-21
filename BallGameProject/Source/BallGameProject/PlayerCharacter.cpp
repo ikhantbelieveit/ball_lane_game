@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "ScrollWithPlayerComponent.h"
 #include "PlayerCharacter.h"
 
 // Sets default values
@@ -411,7 +411,13 @@ void APlayerCharacter::Shoot(EPlayerProjectileDirection direction)
 				LaunchDirection = FVector(0, 0, 1);
 				break;
 			case EPlayerProjectileDirection::Forward:
-				LaunchDirection = FVector(1, 0, 0);
+				LaunchDirection = FVector(5, 0, 0);
+				UScrollWithPlayerComponent* scrollComp = (UScrollWithPlayerComponent*)Projectile->GetComponentByClass(UScrollWithPlayerComponent::StaticClass());
+				scrollComp->Enabled = false;
+				UProjectileMovementComponent* projMoveComp = (UProjectileMovementComponent*)Projectile->GetComponentByClass(UProjectileMovementComponent::StaticClass());
+				projMoveComp->InitialSpeed = 2000.0f;
+				projMoveComp->MaxSpeed = 2000.0f;
+				//Projectile->AttachToActor(GetOwner(), FAttachmentTransformRules::KeepRelativeTransform);
 				break;
 			}
 

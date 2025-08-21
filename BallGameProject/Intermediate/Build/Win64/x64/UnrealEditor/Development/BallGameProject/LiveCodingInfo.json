@@ -5,9 +5,10 @@
 			"EPlayerProjectileDirection.gen.cpp.obj",
 			"EPlayerSpeedState.gen.cpp.obj",
 			"MyGameModeBase.gen.cpp.obj",
+			"PlayerCharacter.gen.cpp.obj",
 			"PlayerProjectile.gen.cpp.obj",
-			"BallGameProject.init.gen.cpp.obj",
-			"PlayerCharacter.gen.cpp.obj"
+			"ScrollWithPlayerComponent.gen.cpp.obj",
+			"BallGameProject.init.gen.cpp.obj"
 		]
 	}
 }

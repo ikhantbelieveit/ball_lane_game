@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "ScrollWithPlayerComponent.h"
 #include "PlayerProjectile.h"
 
 // Sets default values
@@ -29,6 +29,11 @@ APlayerProjectile::APlayerProjectile()
 		// Use this component to drive this projectile's movement.
 		ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 		ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
+	}
+
+	if (!ScrollWithPlayerComponent)
+	{
+		ScrollWithPlayerComponent = CreateDefaultSubobject<UScrollWithPlayerComponent>(TEXT("ScrollWithPlayerComponent"));
 	}
 }
 

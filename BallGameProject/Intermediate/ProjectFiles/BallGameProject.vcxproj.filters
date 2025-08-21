@@ -69,5 +69,11 @@
     <ClInclude Include="..\..\Source\BallGameProject\PlayerProjectile.h">
       <Filter>Source\BallGameProject</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\BallGameProject\ScrollWithPlayerComponent.cpp">
+      <Filter>Source\BallGameProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BallGameProject\ScrollWithPlayerComponent.h">
+      <Filter>Source\BallGameProject</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

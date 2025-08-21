@@ -8,6 +8,8 @@
 #include "GameFramework/Actor.h"
 #include "PlayerProjectile.generated.h"
 
+class UScrollWithPlayerComponent;
+
 UCLASS()
 class BALLGAMEPROJECT_API APlayerProjectile : public AActor
 {
@@ -32,6 +34,10 @@ public:
 	// Projectile movement component.
 	UPROPERTY(VisibleAnywhere, Category = Movement)
 	UProjectileMovementComponent* ProjectileMovementComponent;
+
+	//Scroll with player component
+	UPROPERTY(VisibleAnywhere)
+	UScrollWithPlayerComponent* ScrollWithPlayerComponent;
 
 	// Function that initializes the projectile's velocity in the shoot direction.
 	void FireInDirection(const FVector& ShootDirection);
