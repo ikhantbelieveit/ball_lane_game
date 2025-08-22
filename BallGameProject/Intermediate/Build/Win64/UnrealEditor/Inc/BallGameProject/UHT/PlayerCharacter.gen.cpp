@@ -64,16 +64,14 @@ struct Z_Construct_UClass_APlayerCharacter_Statics
 		{ "IncludePath", "PlayerCharacter.h" },
 		{ "ModuleRelativePath", "PlayerCharacter.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_ShootHoldInputDelay_MetaData[] = {
+		{ "Category", "PlayerCharacter" },
+		{ "ModuleRelativePath", "PlayerCharacter.h" },
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_CameraComponent_MetaData[] = {
 		{ "Category", "PlayerCharacter" },
-#if !UE_BUILD_SHIPPING
-		{ "Comment", "// FPS camera.\n" },
-#endif
 		{ "EditInline", "true" },
 		{ "ModuleRelativePath", "PlayerCharacter.h" },
-#if !UE_BUILD_SHIPPING
-		{ "ToolTip", "FPS camera." },
-#endif
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_DefaultRunSpeed_MetaData[] = {
 		{ "Category", "PlayerCharacter" },
@@ -162,6 +160,7 @@ struct Z_Construct_UClass_APlayerCharacter_Statics
 		{ "ModuleRelativePath", "PlayerCharacter.h" },
 	};
 #endif // WITH_METADATA
+	static const UECodeGen_Private::FFloatPropertyParams NewProp_ShootHoldInputDelay;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_CameraComponent;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_DefaultRunSpeed;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_FastRunSpeed;
@@ -189,6 +188,7 @@ struct Z_Construct_UClass_APlayerCharacter_Statics
 	};
 	static const UECodeGen_Private::FClassParams ClassParams;
 };
+const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_APlayerCharacter_Statics::NewProp_ShootHoldInputDelay = { "ShootHoldInputDelay", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(APlayerCharacter, ShootHoldInputDelay), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ShootHoldInputDelay_MetaData), NewProp_ShootHoldInputDelay_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_APlayerCharacter_Statics::NewProp_CameraComponent = { "CameraComponent", nullptr, (EPropertyFlags)0x00100000000a0009, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(APlayerCharacter, CameraComponent), Z_Construct_UClass_UCameraComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_CameraComponent_MetaData), NewProp_CameraComponent_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_APlayerCharacter_Statics::NewProp_DefaultRunSpeed = { "DefaultRunSpeed", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(APlayerCharacter, DefaultRunSpeed), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_DefaultRunSpeed_MetaData), NewProp_DefaultRunSpeed_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_APlayerCharacter_Statics::NewProp_FastRunSpeed = { "FastRunSpeed", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(APlayerCharacter, FastRunSpeed), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_FastRunSpeed_MetaData), NewProp_FastRunSpeed_MetaData) };
@@ -210,6 +210,7 @@ const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_APlayerCharact
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_APlayerCharacter_Statics::NewProp_InputMap = { "InputMap", nullptr, (EPropertyFlags)0x0020080000000015, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(APlayerCharacter, InputMap), Z_Construct_UClass_UInputMappingContext_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_InputMap_MetaData), NewProp_InputMap_MetaData) };
 const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_APlayerCharacter_Statics::NewProp_ProjectileClass = { "ProjectileClass", nullptr, (EPropertyFlags)0x0024080000010001, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(APlayerCharacter, ProjectileClass), Z_Construct_UClass_UClass, Z_Construct_UClass_APlayerProjectile_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ProjectileClass_MetaData), NewProp_ProjectileClass_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_APlayerCharacter_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APlayerCharacter_Statics::NewProp_ShootHoldInputDelay,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APlayerCharacter_Statics::NewProp_CameraComponent,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APlayerCharacter_Statics::NewProp_DefaultRunSpeed,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APlayerCharacter_Statics::NewProp_FastRunSpeed,
@@ -268,10 +269,10 @@ APlayerCharacter::~APlayerCharacter() {}
 struct Z_CompiledInDeferFile_FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h__Script_BallGameProject_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_APlayerCharacter, APlayerCharacter::StaticClass, TEXT("APlayerCharacter"), &Z_Registration_Info_UClass_APlayerCharacter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(APlayerCharacter), 368897644U) },
+		{ Z_Construct_UClass_APlayerCharacter, APlayerCharacter::StaticClass, TEXT("APlayerCharacter"), &Z_Registration_Info_UClass_APlayerCharacter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(APlayerCharacter), 2699998763U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h__Script_BallGameProject_2047296794(TEXT("/Script/BallGameProject"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h__Script_BallGameProject_688399526(TEXT("/Script/BallGameProject"),
 	Z_CompiledInDeferFile_FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h__Script_BallGameProject_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h__Script_BallGameProject_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

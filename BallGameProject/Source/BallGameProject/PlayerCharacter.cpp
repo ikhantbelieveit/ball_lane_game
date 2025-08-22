@@ -41,6 +41,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 	UpdateSpeedFromInput();
 	UpdateLaneFromInput();
 	UpdateJumpFromInput();
+
+	UpdateShootValues(DeltaTime);
 	UpdateShootFromInput();
 
 	UpdateJumpState(DeltaTime);
@@ -60,21 +62,38 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 void APlayerCharacter::UpdateShootFromInput()
 {
+	if (ShootLeftInput_Active)
+	{
+		Shoot(EPlayerProjectileDirection::Left, false);
+	}
+	if (ShootRightInput_Active)
+	{
+		Shoot(EPlayerProjectileDirection::Right, false);
+	}
+	if (ShootUpInput_Active)
+	{
+		Shoot(EPlayerProjectileDirection::Up, false);
+	}
+	if (ShootForwardInput_Active)
+	{
+		Shoot(EPlayerProjectileDirection::Forward, false);
+	}
+
 	if (ShootLeftInput_Pressed)
 	{
-		Shoot(EPlayerProjectileDirection::Left);
+		Shoot(EPlayerProjectileDirection::Left, true);
 	}
 	if (ShootRightInput_Pressed)
 	{
-		Shoot(EPlayerProjectileDirection::Right);
+		Shoot(EPlayerProjectileDirection::Right, true);
 	}
 	if (ShootUpInput_Pressed)
 	{
-		Shoot(EPlayerProjectileDirection::Up);
+		Shoot(EPlayerProjectileDirection::Up, true);
 	}
 	if (ShootForwardInput_Pressed)
 	{
-		Shoot(EPlayerProjectileDirection::Forward);
+		Shoot(EPlayerProjectileDirection::Forward, true);
 	}
 }
 
@@ -143,6 +162,7 @@ void APlayerCharacter::UpdateJumpFromInput()
 {
 	if (JumpInput_Pressed)
 	{
+		//should check if grounded TODO
 		bPressedJump = true;
 		SetJumpState(EPlayerJumpState::Rise);
 	}
@@ -150,6 +170,26 @@ void APlayerCharacter::UpdateJumpFromInput()
 	if (JumpInput_Released)
 	{
 		bPressedJump = false;
+	}
+}
+
+void APlayerCharacter::UpdateShootValues(float DeltaTime)
+{
+	if (TimeSinceShoot_Left < ShootHoldInputDelay)
+	{
+		TimeSinceShoot_Left += DeltaTime;
+	}
+	if (TimeSinceShoot_Right < ShootHoldInputDelay)
+	{
+		TimeSinceShoot_Right += DeltaTime;
+	}
+	if (TimeSinceShoot_Up < ShootHoldInputDelay)
+	{
+		TimeSinceShoot_Up += DeltaTime;
+	}
+	if (TimeSinceShoot_Forward < ShootHoldInputDelay)
+	{
+		TimeSinceShoot_Forward += DeltaTime;
 	}
 }
 
@@ -161,8 +201,16 @@ void APlayerCharacter::UpdateLaneScroll()
 
 void APlayerCharacter::UpdateJumpState(float DeltaTime)
 {
-	TimeSinceJumpStateChange += DeltaTime;
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Time since jump state change: " + FString::SanitizeFloat(TimeSinceJumpStateChange)));
+	bool apexToFall = false;
+
+	if (TimeSinceJumpStateChange < JumpApexHangTime)
+	{
+		TimeSinceJumpStateChange += DeltaTime;
+	}
+	else
+	{
+		apexToFall = true;
+	}
 
 	switch (CurrentJumpState)
 	{
@@ -175,7 +223,7 @@ void APlayerCharacter::UpdateJumpState(float DeltaTime)
 	case EPlayerJumpState::Fall:
 		break;
 	case EPlayerJumpState::Apex:
-		if (TimeSinceJumpStateChange >= JumpApexHangTime)
+		if (apexToFall)
 		{
 			SetJumpState(EPlayerJumpState::Fall);
 		}
@@ -394,8 +442,13 @@ void APlayerCharacter::Input_ShootForwardStart(const FInputActionValue& Value)
 	ShootForwardInput_Pressed = true;
 }
 
-void APlayerCharacter::Shoot(EPlayerProjectileDirection direction)
+void APlayerCharacter::Shoot(EPlayerProjectileDirection direction, bool bypassDelay)
 {
+	if (!CanShootInDirection(direction) && !bypassDelay)
+	{
+		return;
+	}
+
 	UWorld* World = GetWorld();
 	if (World)
 	{
@@ -444,13 +497,49 @@ void APlayerCharacter::Shoot(EPlayerProjectileDirection direction)
 				UProjectileMovementComponent* projMoveComp = (UProjectileMovementComponent*)Projectile->GetComponentByClass(UProjectileMovementComponent::StaticClass());
 				projMoveComp->InitialSpeed = 2000.0f;
 				projMoveComp->MaxSpeed = 2000.0f;
-				//Projectile->AttachToActor(GetOwner(), FAttachmentTransformRules::KeepRelativeTransform);
 				break;
 			}
 
 			Projectile->FireInDirection(LaunchDirection);
+
+			switch (direction)
+			{
+			case EPlayerProjectileDirection::Left:
+				TimeSinceShoot_Left = 0;
+				break;
+			case EPlayerProjectileDirection::Right:
+				TimeSinceShoot_Right = 0;
+				break;
+			case EPlayerProjectileDirection::Up:
+				TimeSinceShoot_Up = 0;
+				break;
+			case EPlayerProjectileDirection::Forward:
+				TimeSinceShoot_Forward = 0;
+				break;
+			}
 		}
 	}
+}
+
+bool APlayerCharacter::CanShootInDirection(EPlayerProjectileDirection direction)
+{
+	switch (direction)
+	{
+	case EPlayerProjectileDirection::Forward:
+		return TimeSinceShoot_Forward >= ShootHoldInputDelay;
+		break;
+	case EPlayerProjectileDirection::Up:
+		return TimeSinceShoot_Up >= ShootHoldInputDelay;
+		break;
+	case EPlayerProjectileDirection::Left:
+		return TimeSinceShoot_Left >= ShootHoldInputDelay;
+		break;
+	case EPlayerProjectileDirection::Right:
+		return TimeSinceShoot_Right >= ShootHoldInputDelay;
+		break;
+	}
+
+	return false;
 }
 
 float APlayerCharacter::GetCurrentRunSpeed()

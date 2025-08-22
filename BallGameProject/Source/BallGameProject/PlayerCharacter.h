@@ -44,6 +44,8 @@ public:
 
 	void UpdateJumpFromInput();
 
+	void UpdateShootValues(float DeltaTime);
+
 	void UpdateShootFromInput();
 
 	void UpdateLaneScroll();
@@ -78,9 +80,17 @@ public:
 	virtual void Input_ShootUpStart(const FInputActionValue& Value);
 	virtual void Input_ShootForwardStart(const FInputActionValue& Value);
 
-	void Shoot(EPlayerProjectileDirection direction);
+	void Shoot(EPlayerProjectileDirection direction, bool bypassDelay);
+	bool CanShootInDirection(EPlayerProjectileDirection direction);
 
-	// FPS camera.
+	float TimeSinceShoot_Left;
+	float TimeSinceShoot_Right;
+	float TimeSinceShoot_Up;
+	float TimeSinceShoot_Forward;
+
+	UPROPERTY(EditAnywhere)
+	float ShootHoldInputDelay = 0.5f;
+
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComponent;
 	UPROPERTY(EditAnywhere)
