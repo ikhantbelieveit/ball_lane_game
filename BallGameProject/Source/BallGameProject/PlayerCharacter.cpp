@@ -40,12 +40,14 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	UpdateSpeedFromInput();
 	UpdateLaneFromInput();
+
+	UpdateJumpState(DeltaTime);
 	UpdateJumpFromInput();
 
 	UpdateShootValues(DeltaTime);
 	UpdateShootFromInput();
 
-	UpdateJumpState(DeltaTime);
+	
 
 
 	//clamp camera Z pos
@@ -170,6 +172,7 @@ void APlayerCharacter::UpdateJumpFromInput()
 	if (JumpInput_Released)
 	{
 		bPressedJump = false;
+		SetJumpState(EPlayerJumpState::Fall);
 	}
 }
 
@@ -215,9 +218,15 @@ void APlayerCharacter::UpdateJumpState(float DeltaTime)
 	switch (CurrentJumpState)
 	{
 	case EPlayerJumpState::Rise:
-		if (GetVelocity().Z <= 0.01f)
+		if (TimeSinceJumpStateChange > 0.1f)
 		{
-			SetJumpState(EPlayerJumpState::Apex);
+			if (GetVelocity().Z <= 0.01f)
+			{
+				FString string = FString::SanitizeFloat(GetVelocity().Z);
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, *string);
+				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("SET TO APEX."));
+				SetJumpState(EPlayerJumpState::Apex);
+			}
 		}
 		break;
 	case EPlayerJumpState::Fall:
@@ -604,6 +613,7 @@ void APlayerCharacter::SetJumpState(EPlayerJumpState newState)
 		characterMovement->GravityScale = JumpRiseGravity;
 		break;
 	case EPlayerJumpState::Apex:
+		CancelVerticalSpeed();
 		characterMovement->GravityScale = 0;
 		break;
 	case EPlayerJumpState::Fall:
@@ -668,4 +678,12 @@ void APlayerCharacter::Debug_PrintInputValues()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Right Pressed."));
 	}
+}
+
+void APlayerCharacter::CancelVerticalSpeed()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Cancel vertical speed."));
+	GetRootComponent()->ComponentVelocity = FVector(GetRootComponent()->ComponentVelocity.X, GetRootComponent()->ComponentVelocity.Y, 0);
+	FString string = FString::SanitizeFloat(GetVelocity().Z);
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, *string);
 }

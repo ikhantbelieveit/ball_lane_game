@@ -186,4 +186,6 @@ protected:
 	EPlayerSpeedState CurrentSpeedState;
 
 	EPlayerJumpState CurrentJumpState;
+
+	void CancelVerticalSpeed();
 };
