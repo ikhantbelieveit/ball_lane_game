@@ -111,6 +111,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	float JumpApexHangTime = 0.1f;
 
+	bool JumpedThisFrame;
+
 	virtual float GetCurrentRunSpeed();
 
 	void SetSpeedState(EPlayerSpeedState newState);

@@ -36,6 +36,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	JumpedThisFrame = false;
+
 	UpdateLaneScroll();
 
 	UpdateSpeedFromInput();
@@ -46,9 +48,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	UpdateShootValues(DeltaTime);
 	UpdateShootFromInput();
-
-	
-
 
 	//clamp camera Z pos
 	FVector CameraClampZPos = FVector(CameraComponent->GetComponentLocation().X, CameraComponent->GetComponentLocation().Y, CameraHeight);
@@ -167,6 +166,7 @@ void APlayerCharacter::UpdateJumpFromInput()
 		//should check if grounded TODO
 		bPressedJump = true;
 		SetJumpState(EPlayerJumpState::Rise);
+		JumpedThisFrame = true;
 	}
 
 	if (JumpInput_Released)
@@ -218,13 +218,12 @@ void APlayerCharacter::UpdateJumpState(float DeltaTime)
 	switch (CurrentJumpState)
 	{
 	case EPlayerJumpState::Rise:
-		if (TimeSinceJumpStateChange > 0.1f)
+		if (!JumpedThisFrame)
 		{
 			if (GetVelocity().Z <= 0.01f)
 			{
 				FString string = FString::SanitizeFloat(GetVelocity().Z);
 				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, *string);
-				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("SET TO APEX."));
 				SetJumpState(EPlayerJumpState::Apex);
 			}
 		}
