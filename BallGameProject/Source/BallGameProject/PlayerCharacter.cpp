@@ -29,6 +29,8 @@ void APlayerCharacter::BeginPlay()
 	// Display a debug message for five seconds. 
 	// The -1 "Key" value argument prevents the message from being updated or refreshed.
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("PlayerCharacter start."));
+
+	SetJumpState(EPlayerJumpState::Grounded);
 }
 
 // Called every frame
@@ -163,10 +165,12 @@ void APlayerCharacter::UpdateJumpFromInput()
 {
 	if (JumpInput_Pressed)
 	{
-		//should check if grounded TODO
-		bPressedJump = true;
-		SetJumpState(EPlayerJumpState::Rise);
-		JumpedThisFrame = true;
+		if (CurrentJumpState == EPlayerJumpState::Grounded)
+		{
+			bPressedJump = true;
+			SetJumpState(EPlayerJumpState::Rise);
+			JumpedThisFrame = true;
+		}
 	}
 
 	if (JumpInput_Released)
@@ -222,13 +226,15 @@ void APlayerCharacter::UpdateJumpState(float DeltaTime)
 		{
 			if (GetVelocity().Z <= 0.01f)
 			{
-				FString string = FString::SanitizeFloat(GetVelocity().Z);
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, *string);
 				SetJumpState(EPlayerJumpState::Apex);
 			}
 		}
 		break;
 	case EPlayerJumpState::Fall:
+		if (GetVelocity().Z == 0.0f)
+		{
+			SetJumpState(EPlayerJumpState::Grounded);
+		}
 		break;
 	case EPlayerJumpState::Apex:
 		if (apexToFall)
@@ -610,16 +616,20 @@ void APlayerCharacter::SetJumpState(EPlayerJumpState newState)
 	{
 	case EPlayerJumpState::Rise:
 		characterMovement->GravityScale = JumpRiseGravity;
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Rise."));
 		break;
 	case EPlayerJumpState::Apex:
 		CancelVerticalSpeed();
 		characterMovement->GravityScale = 0;
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Apex."));
 		break;
 	case EPlayerJumpState::Fall:
 		characterMovement->GravityScale = JumpFallGravity;
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Fall."));
 		break;
 	case EPlayerJumpState::Grounded:
-		characterMovement->GravityScale = JumpRiseGravity;	//might need changing
+		characterMovement->GravityScale = JumpRiseGravity;
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Grounded."));
 		break;
 	}
 }
@@ -681,8 +691,5 @@ void APlayerCharacter::Debug_PrintInputValues()
 
 void APlayerCharacter::CancelVerticalSpeed()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Cancel vertical speed."));
 	GetRootComponent()->ComponentVelocity = FVector(GetRootComponent()->ComponentVelocity.X, GetRootComponent()->ComponentVelocity.Y, 0);
-	FString string = FString::SanitizeFloat(GetVelocity().Z);
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, *string);
 }
