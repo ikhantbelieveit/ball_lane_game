@@ -31,6 +31,8 @@ void APlayerCharacter::BeginPlay()
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("PlayerCharacter start."));
 
 	SetJumpState(EPlayerJumpState::Grounded);
+
+	SetLane(2);
 }
 
 // Called every frame
@@ -104,6 +106,49 @@ void APlayerCharacter::UpdateLaneFromInput()
 {
 	if (LeftInput_Pressed)
 	{
+		MoveLane_Left();
+	}
+
+	if (RightInput_Pressed)
+	{
+		MoveLane_Right();
+	}
+}
+
+bool APlayerCharacter::MoveLane_Left()
+{
+	return (SetLane(CurrentLaneIndex - 1));
+}
+
+bool APlayerCharacter::MoveLane_Right()
+{
+	return (SetLane(CurrentLaneIndex + 1));
+}
+
+bool APlayerCharacter::SetLane(int laneIndex)
+{
+	if (!CanPlayerOccupyLane(laneIndex))
+	{
+		return false;
+	}
+
+	bool moveLeft = false;
+	bool moveRight = false;
+
+	if (laneIndex == CurrentLaneIndex - 1)
+	{
+		moveLeft = true;
+	}
+
+	if (laneIndex == CurrentLaneIndex + 1)
+	{
+		moveRight = true;
+	}
+	
+	CurrentLaneIndex = laneIndex;
+
+	if (moveLeft)
+	{
 		FVector offset = FVector(0, -LaneDistance, 0);
 		AddActorWorldOffset(offset);
 
@@ -113,16 +158,30 @@ void APlayerCharacter::UpdateLaneFromInput()
 			CameraComponent->GetComponentLocation().Z));
 	}
 
-	if (RightInput_Pressed)
+	if (moveRight)
 	{
 		FVector offset = FVector(0, LaneDistance, 0);
 		AddActorWorldOffset(offset);
+
 
 		CameraComponent->SetWorldLocation(FVector(
 			CameraComponent->GetComponentLocation().X,
 			0,
 			CameraComponent->GetComponentLocation().Z));
 	}
+
+	return true;
+}
+
+bool APlayerCharacter::CanPlayerOccupyLane(int laneIndex)
+{
+	//cancel if outside the 5 valid lanes
+	if (laneIndex < 0 || laneIndex > 4)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 void APlayerCharacter::UpdateSpeedFromInput()

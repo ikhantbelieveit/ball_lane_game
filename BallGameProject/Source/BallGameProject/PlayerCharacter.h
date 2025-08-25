@@ -42,6 +42,11 @@ public:
 
 	void UpdateLaneFromInput();
 
+	bool MoveLane_Left();
+	bool MoveLane_Right();
+	bool SetLane(int laneIndex);
+	bool CanPlayerOccupyLane(int laneIndex);
+
 	void UpdateJumpFromInput();
 
 	void UpdateShootValues(float DeltaTime);
@@ -190,4 +195,6 @@ protected:
 	EPlayerJumpState CurrentJumpState;
 
 	void CancelVerticalSpeed();
+
+	int CurrentLaneIndex;	//0-4 left-right
 };
