@@ -274,6 +274,10 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\BallGameProject\EPlayerSpeedState.h"/>
+    <ClCompile Include="..\..\Source\BallGameProject\LifespanDelegateComponent.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BallGameProject\LifespanDelegateComponent.h"/>
     <ClCompile Include="..\..\Source\BallGameProject\MyGameModeBase.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>

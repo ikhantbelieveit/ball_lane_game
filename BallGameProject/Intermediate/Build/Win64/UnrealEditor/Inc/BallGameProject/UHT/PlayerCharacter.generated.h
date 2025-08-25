@@ -19,7 +19,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 // ********** Begin Class APlayerCharacter *********************************************************
 BALLGAMEPROJECT_API UClass* Z_Construct_UClass_APlayerCharacter_NoRegister();
 
-#define FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h_27_INCLASS_NO_PURE_DECLS \
+#define FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h_28_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAPlayerCharacter(); \
 	friend struct Z_Construct_UClass_APlayerCharacter_Statics; \
@@ -30,7 +30,7 @@ public: \
 	DECLARE_SERIALIZER(APlayerCharacter)
 
 
-#define FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h_27_ENHANCED_CONSTRUCTORS \
+#define FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h_28_ENHANCED_CONSTRUCTORS \
 	/** Deleted move- and copy-constructors, should never be used */ \
 	APlayerCharacter(APlayerCharacter&&) = delete; \
 	APlayerCharacter(const APlayerCharacter&) = delete; \
@@ -40,12 +40,12 @@ public: \
 	NO_API virtual ~APlayerCharacter();
 
 
-#define FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h_24_PROLOG
-#define FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h_27_GENERATED_BODY \
+#define FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h_25_PROLOG
+#define FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h_28_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h_27_INCLASS_NO_PURE_DECLS \
-	FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h_27_ENHANCED_CONSTRUCTORS \
+	FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h_28_INCLASS_NO_PURE_DECLS \
+	FID_Users_Joseph_Documents_GitHub_ball_lane_game_BallGameProject_Source_BallGameProject_PlayerCharacter_h_28_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

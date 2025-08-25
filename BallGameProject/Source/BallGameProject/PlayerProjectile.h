@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include "Kismet/GameplayStatics.h"
+#include "EPlayerProjectileDirection.h"
+#include "LifespanDelegateComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "CoreMinimal.h"
@@ -9,6 +12,7 @@
 #include "PlayerProjectile.generated.h"
 
 class UScrollWithPlayerComponent;
+class APlayerCharacter;
 
 UCLASS()
 class BALLGAMEPROJECT_API APlayerProjectile : public AActor
@@ -39,6 +43,19 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UScrollWithPlayerComponent* ScrollWithPlayerComponent;
 
+	// Sphere collision component
+	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
+	ULifespanDelegateComponent* LifespanComponent;
+
 	// Function that initializes the projectile's velocity in the shoot direction.
 	void FireInDirection(const FVector& ShootDirection);
+
+	void InitialiseBeforeShoot(EPlayerProjectileDirection directionEnum);
+
+	EPlayerProjectileDirection ShootInDirection;
+
+	APlayerCharacter* PlayerRef;
+	bool HasPlayerRef;
+
+	void OnComponentLifespanEnded();
 };

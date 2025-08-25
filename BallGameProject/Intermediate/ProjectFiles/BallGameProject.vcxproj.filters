@@ -57,6 +57,12 @@
     <ClInclude Include="..\..\Source\BallGameProject\EPlayerSpeedState.h">
       <Filter>Source\BallGameProject</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\BallGameProject\LifespanDelegateComponent.cpp">
+      <Filter>Source\BallGameProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BallGameProject\LifespanDelegateComponent.h">
+      <Filter>Source\BallGameProject</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\BallGameProject\MyGameModeBase.cpp">
       <Filter>Source\BallGameProject</Filter>
     </ClCompile>

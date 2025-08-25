@@ -18,6 +18,7 @@
 #include "PlayerCharacter.generated.h"
 
 // Forward declaration of Paper2D component
+
 class UPaperSpriteComponent;
 class UScrollWithPlayerComponent;
 
@@ -92,6 +93,13 @@ public:
 	float TimeSinceShoot_Right;
 	float TimeSinceShoot_Up;
 	float TimeSinceShoot_Forward;
+
+	int HoldShotsRemaining_Left;
+	int HoldShotsRemaining_Right;
+	int HoldShotsRemaining_Up;
+	int HoldShotsRemaining_Forward;
+
+	void OnProjectileLifespanEnded(EPlayerProjectileDirection direction);
 
 	UPROPERTY(EditAnywhere)
 	float ShootHoldInputDelay = 0.5f;

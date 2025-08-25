@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "LifespanDelegateComponent.h"
 #include "ScrollWithPlayerComponent.h"
 #include "PlayerCharacter.h"
 
@@ -549,6 +550,10 @@ void APlayerCharacter::Shoot(EPlayerProjectileDirection direction, bool bypassDe
 		APlayerProjectile* Projectile = World->SpawnActor<APlayerProjectile>(ProjectileClass, shootPos, defaultRotation, SpawnParams);
 		if (Projectile)
 		{
+			//GetPointer
+			Projectile->InitialiseBeforeShoot(direction);
+			//Projectile->LifespanComponent->OnLifetimeEnded.BindUObject(this, &)
+
 			// Set the projectile's initial trajectory.
 			FVector LaunchDirection = FVector();
 			
@@ -613,6 +618,10 @@ bool APlayerCharacter::CanShootInDirection(EPlayerProjectileDirection direction)
 	}
 
 	return false;
+}
+
+void APlayerCharacter::OnProjectileLifespanEnded(EPlayerProjectileDirection direction)
+{
 }
 
 float APlayerCharacter::GetCurrentRunSpeed()
