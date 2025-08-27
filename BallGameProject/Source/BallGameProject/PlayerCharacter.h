@@ -86,8 +86,8 @@ public:
 	virtual void Input_ShootUpStart(const FInputActionValue& Value);
 	virtual void Input_ShootForwardStart(const FInputActionValue& Value);
 
-	void Shoot(EPlayerProjectileDirection direction, bool bypassDelay, bool holdNotTap);
-	bool CanShootInDirection(EPlayerProjectileDirection direction, bool bypassDelay, bool holdNotTap);
+	void Shoot(EPlayerProjectileDirection direction, bool holdNotTap);
+	bool CanShootInDirection(EPlayerProjectileDirection direction, bool holdNotTap);
 	bool DelayPreventsShootInDirection(EPlayerProjectileDirection direction);
 	bool ExceededProjCountForDirection(EPlayerProjectileDirection direction);
 

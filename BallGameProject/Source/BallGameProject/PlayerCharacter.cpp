@@ -70,43 +70,43 @@ void APlayerCharacter::UpdateShootFromInput()
 {
 	if (ShootLeftInput_Pressed)
 	{
-		Shoot(EPlayerProjectileDirection::Left, true, false);
+		Shoot(EPlayerProjectileDirection::Left, false);
 		return;
 	}
 	if (ShootRightInput_Pressed)
 	{
-		Shoot(EPlayerProjectileDirection::Right, true, false);
+		Shoot(EPlayerProjectileDirection::Right, false);
 		return;
 	}
 	if (ShootUpInput_Pressed)
 	{
-		Shoot(EPlayerProjectileDirection::Up, true, false);
+		Shoot(EPlayerProjectileDirection::Up, false);
 		return;
 	}
 	if (ShootForwardInput_Pressed)
 	{
-		Shoot(EPlayerProjectileDirection::Forward, true, false);
+		Shoot(EPlayerProjectileDirection::Forward, false);
 		return;
 	}
 
 	if (ShootLeftInput_Active)
 	{
-		Shoot(EPlayerProjectileDirection::Left, false, true);
+		Shoot(EPlayerProjectileDirection::Left, true);
 		return;
 	}
 	if (ShootRightInput_Active)
 	{
-		Shoot(EPlayerProjectileDirection::Right, false, true);
+		Shoot(EPlayerProjectileDirection::Right, true);
 		return;
 	}
 	if (ShootUpInput_Active)
 	{
-		Shoot(EPlayerProjectileDirection::Up, false, true);
+		Shoot(EPlayerProjectileDirection::Up, true);
 		return;
 	}
 	if (ShootForwardInput_Active)
 	{
-		Shoot(EPlayerProjectileDirection::Forward, false, true);
+		Shoot(EPlayerProjectileDirection::Forward, true);
 		return;
 	}
 
@@ -526,9 +526,9 @@ void APlayerCharacter::Input_ShootForwardStart(const FInputActionValue& Value)
 	ShootForwardInput_Pressed = true;
 }
 
-void APlayerCharacter::Shoot(EPlayerProjectileDirection direction, bool bypassDelay, bool holdNotTap)
+void APlayerCharacter::Shoot(EPlayerProjectileDirection direction, bool holdNotTap)
 {
-	if (!CanShootInDirection(direction, bypassDelay, holdNotTap))
+	if (!CanShootInDirection(direction, holdNotTap))
 	{
 		return;
 	}
@@ -609,8 +609,10 @@ void APlayerCharacter::Shoot(EPlayerProjectileDirection direction, bool bypassDe
 	}
 }
 
-bool APlayerCharacter::CanShootInDirection(EPlayerProjectileDirection direction, bool bypassDelay, bool holdNotTap)
+bool APlayerCharacter::CanShootInDirection(EPlayerProjectileDirection direction, bool holdNotTap)
 {
+	bool bypassDelay = !holdNotTap;
+
 	if (!bypassDelay)
 	{
 		if (DelayPreventsShootInDirection(direction))
