@@ -43,10 +43,6 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UScrollWithPlayerComponent* ScrollWithPlayerComponent;
 
-	// Sphere collision component
-	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
-	ULifespanDelegateComponent* LifespanComponent;
-
 	// Function that initializes the projectile's velocity in the shoot direction.
 	void FireInDirection(const FVector& ShootDirection);
 
@@ -57,5 +53,6 @@ public:
 	APlayerCharacter* PlayerRef;
 	bool HasPlayerRef;
 
-	void OnComponentLifespanEnded();
+	UPROPERTY(EditAnywhere)
+	float Lifespan;
 };

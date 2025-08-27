@@ -68,39 +68,49 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 void APlayerCharacter::UpdateShootFromInput()
 {
-	if (ShootLeftInput_Active)
-	{
-		Shoot(EPlayerProjectileDirection::Left, false);
-	}
-	if (ShootRightInput_Active)
-	{
-		Shoot(EPlayerProjectileDirection::Right, false);
-	}
-	if (ShootUpInput_Active)
-	{
-		Shoot(EPlayerProjectileDirection::Up, false);
-	}
-	if (ShootForwardInput_Active)
-	{
-		Shoot(EPlayerProjectileDirection::Forward, false);
-	}
-
 	if (ShootLeftInput_Pressed)
 	{
-		Shoot(EPlayerProjectileDirection::Left, true);
+		Shoot(EPlayerProjectileDirection::Left, true, false);
+		return;
 	}
 	if (ShootRightInput_Pressed)
 	{
-		Shoot(EPlayerProjectileDirection::Right, true);
+		Shoot(EPlayerProjectileDirection::Right, true, false);
+		return;
 	}
 	if (ShootUpInput_Pressed)
 	{
-		Shoot(EPlayerProjectileDirection::Up, true);
+		Shoot(EPlayerProjectileDirection::Up, true, false);
+		return;
 	}
 	if (ShootForwardInput_Pressed)
 	{
-		Shoot(EPlayerProjectileDirection::Forward, true);
+		Shoot(EPlayerProjectileDirection::Forward, true, false);
+		return;
 	}
+
+	if (ShootLeftInput_Active)
+	{
+		Shoot(EPlayerProjectileDirection::Left, false, true);
+		return;
+	}
+	if (ShootRightInput_Active)
+	{
+		Shoot(EPlayerProjectileDirection::Right, false, true);
+		return;
+	}
+	if (ShootUpInput_Active)
+	{
+		Shoot(EPlayerProjectileDirection::Up, false, true);
+		return;
+	}
+	if (ShootForwardInput_Active)
+	{
+		Shoot(EPlayerProjectileDirection::Forward, false, true);
+		return;
+	}
+
+	
 }
 
 void APlayerCharacter::UpdateLaneFromInput()
@@ -516,9 +526,9 @@ void APlayerCharacter::Input_ShootForwardStart(const FInputActionValue& Value)
 	ShootForwardInput_Pressed = true;
 }
 
-void APlayerCharacter::Shoot(EPlayerProjectileDirection direction, bool bypassDelay)
+void APlayerCharacter::Shoot(EPlayerProjectileDirection direction, bool bypassDelay, bool holdNotTap)
 {
-	if (!CanShootInDirection(direction) && !bypassDelay)
+	if (!CanShootInDirection(direction, bypassDelay, holdNotTap))
 	{
 		return;
 	}
@@ -599,29 +609,104 @@ void APlayerCharacter::Shoot(EPlayerProjectileDirection direction, bool bypassDe
 	}
 }
 
-bool APlayerCharacter::CanShootInDirection(EPlayerProjectileDirection direction)
+bool APlayerCharacter::CanShootInDirection(EPlayerProjectileDirection direction, bool bypassDelay, bool holdNotTap)
+{
+	if (!bypassDelay)
+	{
+		if (DelayPreventsShootInDirection(direction))
+		{
+			return false;
+		}
+	}
+
+	if (holdNotTap)
+	{
+		if (ExceededProjCountForDirection(direction))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool APlayerCharacter::DelayPreventsShootInDirection(EPlayerProjectileDirection direction)
 {
 	switch (direction)
 	{
 	case EPlayerProjectileDirection::Forward:
-		return TimeSinceShoot_Forward >= ShootHoldInputDelay;
+		return TimeSinceShoot_Forward < ShootHoldInputDelay;
 		break;
 	case EPlayerProjectileDirection::Up:
-		return TimeSinceShoot_Up >= ShootHoldInputDelay;
+		return TimeSinceShoot_Up < ShootHoldInputDelay;
 		break;
 	case EPlayerProjectileDirection::Left:
-		return TimeSinceShoot_Left >= ShootHoldInputDelay;
+		return TimeSinceShoot_Left < ShootHoldInputDelay;
 		break;
 	case EPlayerProjectileDirection::Right:
-		return TimeSinceShoot_Right >= ShootHoldInputDelay;
+		return TimeSinceShoot_Right < ShootHoldInputDelay;
 		break;
 	}
 
 	return false;
 }
 
-void APlayerCharacter::OnProjectileLifespanEnded(EPlayerProjectileDirection direction)
+bool APlayerCharacter::ExceededProjCountForDirection(EPlayerProjectileDirection direction)
 {
+	UWorld* World = GetWorld();
+	if (!World)
+	{
+		return true;
+	}
+
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(World, APlayerProjectile::StaticClass(), FoundActors);
+
+	int activeProjectiles_Left = 0;
+	int activeProjectiles_Right = 0;
+	int activeProjectiles_Up = 0;
+	int activeProjectiles_Forward = 0;
+
+	for (AActor* Actor : FoundActors)
+	{
+		APlayerProjectile* proj = Cast<APlayerProjectile>(Actor);
+		if (proj)
+		{
+			switch (proj->ShootInDirection)
+			{
+			case EPlayerProjectileDirection::Left:
+				activeProjectiles_Left++;
+				break;
+			case EPlayerProjectileDirection::Right:
+				activeProjectiles_Right++;
+				break;
+			case EPlayerProjectileDirection::Up:
+				activeProjectiles_Up++;
+				break;
+			case EPlayerProjectileDirection::Forward:
+				activeProjectiles_Forward++;
+				break;
+			}
+		}
+	}
+
+	switch (direction)
+	{
+	case EPlayerProjectileDirection::Left:
+		return activeProjectiles_Left >= HoldShoot_MaxProjectiles;
+		break;
+	case EPlayerProjectileDirection::Right:
+		return activeProjectiles_Right >= HoldShoot_MaxProjectiles;
+		break;
+	case EPlayerProjectileDirection::Up:
+		return activeProjectiles_Up >= HoldShoot_MaxProjectiles;
+		break;
+	case EPlayerProjectileDirection::Forward:
+		return activeProjectiles_Forward >= HoldShoot_MaxProjectiles;
+		break;
+	}
+
+	return false;
 }
 
 float APlayerCharacter::GetCurrentRunSpeed()

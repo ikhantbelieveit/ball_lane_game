@@ -86,8 +86,10 @@ public:
 	virtual void Input_ShootUpStart(const FInputActionValue& Value);
 	virtual void Input_ShootForwardStart(const FInputActionValue& Value);
 
-	void Shoot(EPlayerProjectileDirection direction, bool bypassDelay);
-	bool CanShootInDirection(EPlayerProjectileDirection direction);
+	void Shoot(EPlayerProjectileDirection direction, bool bypassDelay, bool holdNotTap);
+	bool CanShootInDirection(EPlayerProjectileDirection direction, bool bypassDelay, bool holdNotTap);
+	bool DelayPreventsShootInDirection(EPlayerProjectileDirection direction);
+	bool ExceededProjCountForDirection(EPlayerProjectileDirection direction);
 
 	float TimeSinceShoot_Left;
 	float TimeSinceShoot_Right;
@@ -98,8 +100,6 @@ public:
 	int HoldShotsRemaining_Right;
 	int HoldShotsRemaining_Up;
 	int HoldShotsRemaining_Forward;
-
-	void OnProjectileLifespanEnded(EPlayerProjectileDirection direction);
 
 	UPROPERTY(EditAnywhere)
 	float ShootHoldInputDelay = 0.5f;
@@ -137,6 +137,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float CameraHeight = 175.0f;
+
+	UPROPERTY(EditAnywhere)
+	int HoldShoot_MaxProjectiles = 1;
 
 
 

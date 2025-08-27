@@ -36,41 +36,13 @@ APlayerProjectile::APlayerProjectile()
 	{
 		ScrollWithPlayerComponent = CreateDefaultSubobject<UScrollWithPlayerComponent>(TEXT("ScrollWithPlayerComponent"));
 	}
-
-	if (!LifespanComponent)
-	{
-		LifespanComponent = CreateDefaultSubobject<ULifespanDelegateComponent>(TEXT("LifespanComponent"));
-	}
 }
 
 // Called when the game starts or when spawned
 void APlayerProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-
-	UWorld* World = GetWorld();
-	if (World)
-	{
-		AActor* foundPlayerActor = UGameplayStatics::GetActorOfClass(World, APlayerCharacter::StaticClass());
-
-		PlayerRef = Cast<APlayerCharacter>(foundPlayerActor);
-		if (nullptr != PlayerRef)
-		{
-			HasPlayerRef = true;
-
-			if (LifespanComponent)
-			{
-				//LifespanComponent->OnLifetimeEnded.BindUObject(OnComponentLifespanEnded);
-			}
-		}
-		else
-		{
-
-		}
-	}
 	
-	//InitialLifeSpan = 3.0f;
-	LifespanComponent->MaxLifespan = 3.0f;
 }
 
 // Called every frame
@@ -90,10 +62,4 @@ void APlayerProjectile::FireInDirection(const FVector& ShootDirection)
 void APlayerProjectile::InitialiseBeforeShoot(EPlayerProjectileDirection directionEnum)
 {
 	ShootInDirection = directionEnum;
-}
-
-void APlayerProjectile::OnComponentLifespanEnded()
-{
-	PlayerRef->OnProjectileLifespanEnded(ShootInDirection);
-	Destroy();
 }
