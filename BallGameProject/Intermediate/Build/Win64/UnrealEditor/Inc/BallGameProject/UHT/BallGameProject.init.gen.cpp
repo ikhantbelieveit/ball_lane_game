@@ -21,13 +21,13 @@ void EmptyLinkFunctionForGeneratedCodeBallGameProject_init() {}
 				SingletonFuncArray,
 				UE_ARRAY_COUNT(SingletonFuncArray),
 				PKG_CompiledIn | 0x00000000,
-				0x563712FB,
-				0x9A04799C,
+				0xA4EA6D89,
+				0xEA92E1E9,
 				METADATA_PARAMS(0, nullptr)
 			};
 			UECodeGen_Private::ConstructUPackage(Z_Registration_Info_UPackage__Script_BallGameProject.OuterSingleton, PackageParams);
 		}
 		return Z_Registration_Info_UPackage__Script_BallGameProject.OuterSingleton;
 	}
-	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_BallGameProject(Z_Construct_UPackage__Script_BallGameProject, TEXT("/Script/BallGameProject"), Z_Registration_Info_UPackage__Script_BallGameProject, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0x563712FB, 0x9A04799C));
+	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_BallGameProject(Z_Construct_UPackage__Script_BallGameProject, TEXT("/Script/BallGameProject"), Z_Registration_Info_UPackage__Script_BallGameProject, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0xA4EA6D89, 0xEA92E1E9));
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

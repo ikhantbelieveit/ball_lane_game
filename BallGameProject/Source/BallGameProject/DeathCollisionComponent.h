@@ -46,9 +46,10 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	// Event you can hook into in BP or bind in C++
 	UPROPERTY(BlueprintAssignable, Category = "Overlap")
 	FOnPlayerEnter OnPlayerEnter;
+
+	void TriggerKillPlayer();
 
 		
 };

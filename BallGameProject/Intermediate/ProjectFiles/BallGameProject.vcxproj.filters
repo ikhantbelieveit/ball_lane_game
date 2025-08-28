@@ -63,6 +63,12 @@
     <ClInclude Include="..\..\Source\BallGameProject\EPlayerSpeedState.h">
       <Filter>Source\BallGameProject</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\BallGameProject\LevelSystem.cpp">
+      <Filter>Source\BallGameProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BallGameProject\LevelSystem.h">
+      <Filter>Source\BallGameProject</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\BallGameProject\LifespanDelegateComponent.cpp">
       <Filter>Source\BallGameProject</Filter>
     </ClCompile>
@@ -73,6 +79,12 @@
       <Filter>Source\BallGameProject</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\BallGameProject\MyGameModeBase.h">
+      <Filter>Source\BallGameProject</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\BallGameProject\MyHUD.cpp">
+      <Filter>Source\BallGameProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BallGameProject\MyHUD.h">
       <Filter>Source\BallGameProject</Filter>
     </ClInclude>
     <ClCompile Include="..\..\Source\BallGameProject\PlayerCharacter.cpp">

@@ -49,7 +49,7 @@ void UDeathCollisionComponent::HandleBeginOverlap(
 	// Check for tag
 	if (OtherActor->ActorHasTag(PlayerTag))
 	{
-		OnPlayerEnter.Broadcast();
+		TriggerKillPlayer();
 	}
 }
 
@@ -62,5 +62,9 @@ void UDeathCollisionComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	// ...
 }
 
+void UDeathCollisionComponent::TriggerKillPlayer()
+{
+	OnPlayerEnter.Broadcast();
+}
 
 
