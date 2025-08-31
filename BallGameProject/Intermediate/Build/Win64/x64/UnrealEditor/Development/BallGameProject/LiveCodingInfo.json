@@ -15,6 +15,7 @@
 			"PlayerCharacter.gen.cpp.obj",
 			"PlayerProjectile.gen.cpp.obj",
 			"ScrollWithPlayerComponent.gen.cpp.obj",
+			"TestMainMenu2.gen.cpp.obj",
 			"BallGameProject.init.gen.cpp.obj"
 		]
 	}

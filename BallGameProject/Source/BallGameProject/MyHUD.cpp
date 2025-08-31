@@ -5,12 +5,15 @@
 #include "GameFramework/PlayerController.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/Button.h"
 
 void AMyHUD::BeginPlay()
 {
 	Initialise();
 	ShowMainMenu();
 }
+
+
 
 void AMyHUD::Initialise()
 {
@@ -41,3 +44,8 @@ void AMyHUD::HideMainMenu()
 	}
 }
 
+void AMyHUD::OnStartButtonPressed()
+{
+	//hide main menu
+	//set game state to active
+}

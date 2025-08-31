@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
+#include "Blueprint/UserWidget.h"
 #include "MyHUD.generated.h"
 
 /**
@@ -35,4 +36,10 @@ protected:
 	// Keep a pointer to be able to hide it
 	UPROPERTY()
 	UUserWidget* MainMenu;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* StartButton;
+
+	UFUNCTION()
+	void OnStartButtonPressed();
 };
