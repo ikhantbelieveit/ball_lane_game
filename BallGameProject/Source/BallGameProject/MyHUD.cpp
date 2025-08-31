@@ -18,30 +18,30 @@ void AMyHUD::BeginPlay()
 void AMyHUD::Initialise()
 {
 	// Make widget owned by our PlayerController
-	APlayerController* PC = Cast<APlayerController>(GetOwner());
+	/*APlayerController* PC = Cast<APlayerController>(GetOwner());
 
 	if (PC)
 	{
 		MainMenu = CreateWidget<UUserWidget>(PC, MainMenuClass);
 
 		MainMenu->AddToViewport();
-	}
+	}*/
 }
 
 void AMyHUD::ShowMainMenu()
 {
-	if (MainMenu)
+	/*if (MainMenu)
 	{
 		MainMenu->SetVisibility(ESlateVisibility::Visible);
-	}
+	}*/
 }
 
 void AMyHUD::HideMainMenu()
 {
-	if (MainMenu)
+	/*if (MainMenu)
 	{
 		MainMenu->SetVisibility(ESlateVisibility::Hidden);
-	}
+	}*/
 }
 
 void AMyHUD::OnStartButtonPressed()
