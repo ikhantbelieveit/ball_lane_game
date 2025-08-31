@@ -22,6 +22,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void HideMainMenu();
 
+	UFUNCTION(BlueprintCallable)
+	void Initialise();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BallGameProjectModuleRules")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Development")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c5383ce339afc51a1e1b3c0e9950807b6515f704")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c5ba00d319975f0237c45d7896c77bcd6e3ba262")]
 [assembly: System.Reflection.AssemblyProductAttribute("BallGameProjectModuleRules")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BallGameProjectModuleRules")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

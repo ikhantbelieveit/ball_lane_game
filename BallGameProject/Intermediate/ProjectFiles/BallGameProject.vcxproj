@@ -266,6 +266,10 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\BallGameProject\DeathCollisionComponent.h"/>
+    <ClCompile Include="..\..\Source\BallGameProject\EGameState.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BallGameProject\EGameState.h"/>
     <ClCompile Include="..\..\Source\BallGameProject\EPlayerJumpState.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -278,6 +282,10 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\BallGameProject\EPlayerSpeedState.h"/>
+    <ClCompile Include="..\..\Source\BallGameProject\GameInit.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BallGameProject\GameInit.h"/>
     <ClCompile Include="..\..\Source\BallGameProject\LevelSystem.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>

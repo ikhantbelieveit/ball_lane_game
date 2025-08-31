@@ -2,7 +2,25 @@
 
 #include "LifespanDelegateComponent.h"
 #include "ScrollWithPlayerComponent.h"
+#include "GameInit.h"
 #include "PlayerCharacter.h"
+
+void APlayerCharacter::Initialise()
+{
+	if (Initialised)
+	{
+		return;
+	}
+
+	AGameInit* GameInit = Cast<AGameInit>(UGameplayStatics::GetActorOfClass(GetWorld(), AGameInit::StaticClass()));
+
+	if (GameInit)
+	{
+		GameInitRef = GameInit;
+	}
+
+	Initialised = true;
+}
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -43,27 +61,30 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	JumpedThisFrame = false;
 
-	UpdateLaneScroll();
+	switch (GameInitRef->GetGameState())
+	{
+	case EGameState::Active:
+		UpdateLaneScroll();
 
-	UpdateSpeedFromInput();
-	UpdateLaneFromInput();
+		UpdateSpeedFromInput();
+		UpdateLaneFromInput();
 
-	UpdateJumpState(DeltaTime);
-	UpdateJumpFromInput();
+		UpdateJumpState(DeltaTime);
+		UpdateJumpFromInput();
 
-	UpdateShootValues(DeltaTime);
-	UpdateShootFromInput();
+		UpdateShootValues(DeltaTime);
+		UpdateShootFromInput();
 
-	//clamp camera Z pos
-	FVector CameraClampZPos = FVector(CameraComponent->GetComponentLocation().X, CameraComponent->GetComponentLocation().Y, CameraHeight);
-	CameraComponent->SetWorldLocation(CameraClampZPos);
-	
-	//Debug_PrintInputValues();
+		//clamp camera Z pos
+		FVector CameraClampZPos = FVector(CameraComponent->GetComponentLocation().X, CameraComponent->GetComponentLocation().Y, CameraHeight);
+		CameraComponent->SetWorldLocation(CameraClampZPos);
 
-	//clear stuff at end
-	ClearInputValues();
+		//Debug_PrintInputValues();
 
-	
+		//clear stuff at end
+		ClearInputValues();
+		break;
+	}
 }
 
 void APlayerCharacter::UpdateShootFromInput()
@@ -787,6 +808,22 @@ void APlayerCharacter::SetJumpState(EPlayerJumpState newState)
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Grounded."));
 		break;
 	}
+}
+
+void APlayerCharacter::UpdateOnGameStateChange(EGameState newState)
+{
+	switch (newState)
+	{
+	case EGameState::Active:
+		break;
+	case EGameState::Dormant:
+		break;
+	case EGameState::Win:
+		break;
+	case EGameState::Lose:
+		break;
+	}
+
 }
 
 

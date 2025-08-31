@@ -6,6 +6,7 @@
 #include "EPlayerProjectileDirection.h"
 #include "PlayerProjectile.h"
 #include "EPlayerSpeedState.h"
+#include "EGameState.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "InputMappingContext.h"
@@ -19,6 +20,7 @@
 
 // Forward declaration of Paper2D component
 
+class AGameInit;
 class UPaperSpriteComponent;
 class UScrollWithPlayerComponent;
 
@@ -36,6 +38,8 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	void Initialise();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -141,9 +145,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	int HoldShoot_MaxProjectiles = 1;
 
+	void UpdateOnGameStateChange(EGameState newState);
 
 
 protected:
+	bool Initialised;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* Input_LeftAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -208,4 +215,6 @@ protected:
 	void CancelVerticalSpeed();
 
 	int CurrentLaneIndex;	//0-4 left-right
+
+	AGameInit* GameInitRef;
 };

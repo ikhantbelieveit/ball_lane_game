@@ -8,10 +8,11 @@
 
 void AMyHUD::BeginPlay()
 {
+	Initialise();
 	ShowMainMenu();
 }
 
-void AMyHUD::ShowMainMenu()
+void AMyHUD::Initialise()
 {
 	// Make widget owned by our PlayerController
 	APlayerController* PC = Cast<APlayerController>(GetOwner());
@@ -24,12 +25,19 @@ void AMyHUD::ShowMainMenu()
 	}
 }
 
+void AMyHUD::ShowMainMenu()
+{
+	if (MainMenu)
+	{
+		MainMenu->SetVisibility(ESlateVisibility::Visible);
+	}
+}
+
 void AMyHUD::HideMainMenu()
 {
 	if (MainMenu)
 	{
-		MainMenu->RemoveFromParent();
-		MainMenu = nullptr;
+		MainMenu->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 
