@@ -1,7 +1,8 @@
 {
 	"RemapUnityFiles": 
 	{
-		"Module.BallGameProject.gen.cpp.obj": [
+		"Module.BallGameProject.cpp.obj": [
+			"BallGameProject.init.gen.cpp.obj",
 			"DeathCollisionComponent.gen.cpp.obj",
 			"EGameState.gen.cpp.obj",
 			"EPlayerJumpState.gen.cpp.obj",
@@ -16,7 +17,24 @@
 			"PlayerProjectile.gen.cpp.obj",
 			"ScrollWithPlayerComponent.gen.cpp.obj",
 			"TestMainMenu2.gen.cpp.obj",
-			"BallGameProject.init.gen.cpp.obj"
+			"UIStateSystem.gen.cpp.obj",
+			"PerModuleInline.gen.cpp.obj",
+			"BallGameProject.cpp.obj",
+			"DeathCollisionComponent.cpp.obj",
+			"EGameState.cpp.obj",
+			"EPlayerJumpState.cpp.obj",
+			"EPlayerProjectileDirection.cpp.obj",
+			"EPlayerSpeedState.cpp.obj",
+			"GameInit.cpp.obj",
+			"LifespanDelegateComponent.cpp.obj",
+			"MyGameModeBase.cpp.obj",
+			"MyHUD.cpp.obj",
+			"PlayerCharacter.cpp.obj",
+			"PlayerProjectile.cpp.obj",
+			"ScrollWithPlayerComponent.cpp.obj",
+			"TestMainMenu2.cpp.obj",
+			"LevelSystem.cpp.obj",
+			"UIStateSystem.cpp.obj"
 		]
 	}
 }

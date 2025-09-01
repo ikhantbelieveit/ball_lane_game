@@ -75,6 +75,8 @@ void ALevelSystem::KillPlayer()
 {
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
 
+	SetGameState(EGameState::Lose);
+
 	APlayerController* controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (controller)
 	{
