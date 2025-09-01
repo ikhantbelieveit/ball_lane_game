@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "PlayerCharacter.h"
 #include "LevelSystem.h"
 
 // Sets default values
@@ -11,11 +11,31 @@ ALevelSystem::ALevelSystem()
 
 }
 
-// Called when the game starts or when spawned
-void ALevelSystem::BeginPlay()
+void ALevelSystem::InitialiseOnPlay()
 {
-	Super::BeginPlay();
-	
+	if (Initialised)
+	{
+		return;
+	}
+
+	//get player ref
+	UWorld* World = GetWorld();
+	if (!World)
+	{
+		return;
+	}
+
+	APlayerCharacter* PlayerRef = Cast<APlayerCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerCharacter::StaticClass()));
+
+	if (PlayerRef)
+	{
+		Player = PlayerRef;
+	}
+
+	SetGameState(EGameState::Dormant);
+
+	Initialised = true;
+
 	// Get all actors in the level
 	TArray<AActor*> AllActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), AllActors);
@@ -33,6 +53,15 @@ void ALevelSystem::BeginPlay()
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("registered kill event to level system."));
 		}
 	}
+}
+
+// Called when the game starts or when spawned
+void ALevelSystem::BeginPlay()
+{
+	Super::BeginPlay();
+	InitialiseOnPlay();
+	
+	
 }
 
 // Called every frame
@@ -61,3 +90,24 @@ void ALevelSystem::KillPlayer()
 	//Widget->SetTickableWhenPaused(true);
 }
 
+void ALevelSystem::SetGameState(EGameState newState)
+{
+	CurrentState = newState;
+
+	if (Player)
+	{
+		Player->UpdateOnGameStateChange(newState);
+	}
+}
+
+EGameState ALevelSystem::GetGameState()
+{
+	return CurrentState;
+}
+
+void ALevelSystem::StartLevel()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("start."));
+
+	SetGameState(EGameState::Active);
+}

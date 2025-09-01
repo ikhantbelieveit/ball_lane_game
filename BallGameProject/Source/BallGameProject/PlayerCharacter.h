@@ -19,7 +19,7 @@
 #include "PlayerCharacter.generated.h"
 
 // Forward declaration of Paper2D component
-
+class ALevelSystem;
 class AGameInit;
 class UPaperSpriteComponent;
 class UScrollWithPlayerComponent;
@@ -216,5 +216,5 @@ protected:
 
 	int CurrentLaneIndex;	//0-4 left-right
 
-	AGameInit* GameInitRef;
+	ALevelSystem* LevelSystemRef;
 };

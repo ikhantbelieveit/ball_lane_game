@@ -6,7 +6,9 @@
 #include "CoreMinimal.h"
 #include "DeathCollisionComponent.h"
 #include "GameFramework/Actor.h"
+#include "EGameState.h"
 #include "LevelSystem.generated.h"
+class APlayerCharacter;
 
 UCLASS()
 class BALLGAMEPROJECT_API ALevelSystem : public AActor
@@ -21,11 +23,25 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	EGameState CurrentState;
+
+	bool Initialised;
+
+	APlayerCharacter* Player;
+
+	void InitialiseOnPlay();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
 	void KillPlayer();
+
+	void SetGameState(EGameState newState);
+	EGameState GetGameState();
+
+	UFUNCTION(BlueprintCallable)
+	void StartLevel();
 
 };

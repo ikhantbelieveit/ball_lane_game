@@ -3,6 +3,7 @@
 #include "LifespanDelegateComponent.h"
 #include "ScrollWithPlayerComponent.h"
 #include "GameInit.h"
+#include "LevelSystem.h"
 #include "PlayerCharacter.h"
 
 void APlayerCharacter::Initialise()
@@ -12,11 +13,11 @@ void APlayerCharacter::Initialise()
 		return;
 	}
 
-	AGameInit* GameInit = Cast<AGameInit>(UGameplayStatics::GetActorOfClass(GetWorld(), AGameInit::StaticClass()));
+	ALevelSystem* LevelSystem = Cast<ALevelSystem>(UGameplayStatics::GetActorOfClass(GetWorld(), ALevelSystem::StaticClass()));
 
-	if (GameInit)
+	if (LevelSystem)
 	{
-		GameInitRef = GameInit;
+		LevelSystemRef = LevelSystem;
 	}
 
 	Initialised = true;
@@ -61,7 +62,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	JumpedThisFrame = false;
 
-	switch (GameInitRef->GetGameState())
+	switch (LevelSystemRef->GetGameState())
 	{
 	case EGameState::Active:
 		UpdateLaneScroll();

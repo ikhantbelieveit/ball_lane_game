@@ -2,7 +2,6 @@
 	"RemapUnityFiles": 
 	{
 		"Module.BallGameProject.gen.cpp.obj": [
-			"BallGameProject.init.gen.cpp.obj",
 			"DeathCollisionComponent.gen.cpp.obj",
 			"EGameState.gen.cpp.obj",
 			"EPlayerJumpState.gen.cpp.obj",
@@ -16,7 +15,8 @@
 			"PlayerCharacter.gen.cpp.obj",
 			"PlayerProjectile.gen.cpp.obj",
 			"ScrollWithPlayerComponent.gen.cpp.obj",
-			"TestMainMenu2.gen.cpp.obj"
+			"TestMainMenu2.gen.cpp.obj",
+			"BallGameProject.init.gen.cpp.obj"
 		]
 	}
 }

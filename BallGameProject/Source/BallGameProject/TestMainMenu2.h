@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class BALLGAMEPROJECT_API UTestMainMenu2 : public UUserWidget
 {
 	GENERATED_BODY()
@@ -17,10 +17,12 @@ class BALLGAMEPROJECT_API UTestMainMenu2 : public UUserWidget
 public:
     virtual void NativeConstruct() override;
 
+    UFUNCTION(BlueprintCallable, Category="MyFunctions")
+    void OnStartButtonClicked();
+
 protected:
     UPROPERTY(meta = (BindWidget))
     class UButton* StartButton;
 
-    UFUNCTION()
-    void OnStartButtonClicked();
+    
 };
