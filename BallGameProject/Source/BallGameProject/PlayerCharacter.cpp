@@ -34,6 +34,12 @@ void APlayerCharacter::BeginPlay()
 	SetJumpState(EPlayerJumpState::Grounded);
 
 	SetLane(2);
+
+	ALevelSystem* LevelSystem = Cast<ALevelSystem>(UGameplayStatics::GetActorOfClass(GetWorld(), ALevelSystem::StaticClass()));
+	if (LevelSystem)
+	{
+		LevelSystemRef = LevelSystem;
+	}
 }
 
 // Called every frame
@@ -41,27 +47,37 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	JumpedThisFrame = false;
+	if (nullptr != LevelSystemRef)
+	{
+		switch (LevelSystemRef->GetGameState())
+		{
+		case EGameState::Active:
+			JumpedThisFrame = false;
 
-	UpdateLaneScroll();
+			UpdateLaneScroll();
 
-	UpdateSpeedFromInput();
-	UpdateLaneFromInput();
+			UpdateSpeedFromInput();
+			UpdateLaneFromInput();
 
-	UpdateJumpState(DeltaTime);
-	UpdateJumpFromInput();
+			UpdateJumpState(DeltaTime);
+			UpdateJumpFromInput();
 
-	UpdateShootValues(DeltaTime);
-	UpdateShootFromInput();
+			UpdateShootValues(DeltaTime);
+			UpdateShootFromInput();
 
-	//clamp camera Z pos
-	FVector CameraClampZPos = FVector(CameraComponent->GetComponentLocation().X, CameraComponent->GetComponentLocation().Y, CameraHeight);
-	CameraComponent->SetWorldLocation(CameraClampZPos);
+			//clamp camera Z pos
+			FVector CameraClampZPos = FVector(CameraComponent->GetComponentLocation().X, CameraComponent->GetComponentLocation().Y, CameraHeight);
+			CameraComponent->SetWorldLocation(CameraClampZPos);
+
+			//Debug_PrintInputValues();
+
+			//clear stuff at end
+			ClearInputValues();
+			break;
+		}
+	}
+
 	
-	//Debug_PrintInputValues();
-
-	//clear stuff at end
-	ClearInputValues();
 
 	
 }

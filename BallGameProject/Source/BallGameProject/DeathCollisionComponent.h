@@ -7,7 +7,6 @@
 #include "Components/BoxComponent.h"
 #include "DeathCollisionComponent.generated.h"
 
-// Declare a delegate so you can bind functions to it in Blueprints or C++
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerEnter);
 
 
@@ -46,7 +45,6 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	// Event you can hook into in BP or bind in C++
 	UPROPERTY(BlueprintAssignable, Category = "Overlap")
 	FOnPlayerEnter OnPlayerEnter;
 

@@ -14,6 +14,7 @@
 #include "EnhancedInputComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "LevelSystem.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "PlayerCharacter.generated.h"
 
@@ -208,4 +209,6 @@ protected:
 	void CancelVerticalSpeed();
 
 	int CurrentLaneIndex;	//0-4 left-right
+
+	ALevelSystem* LevelSystemRef;
 };

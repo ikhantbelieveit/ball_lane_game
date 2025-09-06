@@ -2,6 +2,8 @@
 
 
 #include "DeathCollisionComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "LevelSystem.h"
 
 // Sets default values for this component's properties
 UDeathCollisionComponent::UDeathCollisionComponent()
@@ -30,6 +32,7 @@ void UDeathCollisionComponent::BeginPlay()
 	{
 		CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &UDeathCollisionComponent::HandleBeginOverlap);
 	}
+
 }
 
 void UDeathCollisionComponent::HandleBeginOverlap(
@@ -50,6 +53,12 @@ void UDeathCollisionComponent::HandleBeginOverlap(
 	if (OtherActor->ActorHasTag(PlayerTag))
 	{
 		OnPlayerEnter.Broadcast();
+
+		ALevelSystem* LevelSystem = Cast<ALevelSystem>(UGameplayStatics::GetActorOfClass(GetWorld(), ALevelSystem::StaticClass()));
+		if (LevelSystem)
+		{
+			LevelSystem->HandleDeathEvent();
+		}
 	}
 }
 
